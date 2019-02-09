@@ -1,0 +1,7 @@
+```
+ドメインモデルとは？
+システムの鍵となる概念と用語を文書化するために作成されるものです。
+ドメインモデルでは、システムの主要な実体とそれらの間の関係性を明らかにして、場合によってはそれらの重要なメソッドと属性も洗い出します。
+```
+
+![](http://www.plantuml.com/plantuml/png/SoWkIImgAStDuKhCoSalZy_DhCZCI-TAJ2x9Br9GUjoqw77J-iTD-nytxr5II2nMS0I9msIVBfdsidd5usQWcXsFcvS2rJnkNWrMvbfHmfMSarXS33IYUHb8ecaRa7o-Rk7p2MtODFZcfvJcf6BJ0vOEBKujWaisxNxStFouQVlZvkMFcpU3vODJYuipy_DmAF5qGLRacSB5vGZsWAwk7THYAuN7pMiVDsrutBG4g1v97kGJa2J2FOyRLpnkdFwuSTdJZfNFfwpW0Yf0CWXDRTEafrFx7pUsF9tGyRW9o9ZzkAcRYmkY5AGBuZ447-uHX12oiw5Ck4wO09ewXzIy562C0W00)
