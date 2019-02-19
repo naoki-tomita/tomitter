@@ -1,6 +1,6 @@
-package domain.response
+package values.response
 
-import domain.User
+import entities.User
 
 data class UserResponse(val id: Int, val loginName: String) {
     companion object {

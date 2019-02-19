@@ -1,9 +1,8 @@
 package services.users
 
-import domain.User
+import entities.User
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.sqlite.SQLiteErrorCode
 import org.sqlite.SQLiteException
@@ -14,13 +13,6 @@ object Users: IntIdTable() {
 }
 
 class UserAlreadyExistException(id: String): Exception("$id is already exist.")
-fun init() {
-    Database.connect("jdbc:sqlite:./data.db", "org.sqlite.JDBC")
-    TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
-    transaction {
-        SchemaUtils.create(Users)
-    }
-}
 
 fun create(loginName: String, password: String): User {
     return transaction {
@@ -29,7 +21,7 @@ fun create(loginName: String, password: String): User {
                 it[Users.loginName] = loginName
                 it[Users.password] = password
             }
-        User(id.value, loginName, password)
+            User(id.value, loginName, password)
         } catch (e: Exception) {
             val original = e.cause
             when (original) {
@@ -45,10 +37,20 @@ fun create(loginName: String, password: String): User {
     }
 }
 
-fun list(): List<User> {
-    return transaction {
-        val query = Users.selectAll()
-        query.map { User(it[Users.id].value, it[Users.loginName], it[Users.password]) }
+class UserNotFountException(id: String): Exception("$id is not found.")
+class PasswordDidNotMatchException(): Exception("Password did not match.")
+
+fun findBy(loginName: String, password: String): User {
+    val users = transaction { queryToUser(Users.select { Users.loginName eq loginName }) }
+    if (users.count() == 0) {
+        throw UserNotFountException(loginName)
     }
+    if (!users.first().password.equals(password)) {
+        throw PasswordDidNotMatchException()
+    }
+    return users.first()
 }
 
+fun list(): List<User> = transaction { queryToUser(Users.selectAll()) }
+
+fun queryToUser(query: Query): List<User> = query.map { User(it[Users.id].value, it[Users.loginName], it[Users.password]) }

@@ -1,7 +1,7 @@
-package usecase
+package usecases
 
-import domain.request.CreateRequest
-import domain.User
+import values.request.CreateRequest
+import entities.User
 import io.mockk.every
 import io.mockk.mockkStatic
 import org.junit.jupiter.api.Test
