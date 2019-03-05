@@ -9,17 +9,24 @@ import io.mockk.verify
 import org.amshove.kluent.invoking
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import port.UsersPort
 
 class UsecaseTest {
 
+    lateinit var usecase: UsersUsecase
+    lateinit var usersPort: UsersPort
+
+    @BeforeEach
+    fun usecaseとusersPortを初期化する() {
+        usecase = UsersUsecase()
+        usersPort = mockk<UsersPort>()
+        usecase.usersPort = usersPort
+    }
+
     @Test
     fun ユーザーを作成すること() {
-        val usecase = UsersUsecase()
-        val usersPort = mockk<UsersPort>()
-        usecase.usersPort = usersPort
-
         val user = User(UserId(0), LoginName("loginName"), Password("password"))
         val response = CreateResponse(0, "loginName")
 
@@ -32,10 +39,6 @@ class UsecaseTest {
 
     @Test
     fun すでに同じIDが存在する場合作成に失敗しエラーを投げること() {
-        val usecase = UsersUsecase()
-        val usersPort = mockk<UsersPort>()
-        usecase.usersPort = usersPort
-
         val loginName = LoginName("loginName")
         val password = Password("password")
         val user = User(UserId(0), loginName, password)
@@ -50,10 +53,6 @@ class UsecaseTest {
 
     @Test
     fun ユーザーの一覧を取得すること() {
-        val usecase = UsersUsecase()
-        val usersPort = mockk<UsersPort>()
-        usecase.usersPort = usersPort
-
         val users = mockk<Users>()
 
         every { usersPort.list() } returns users
@@ -61,6 +60,13 @@ class UsecaseTest {
         usecase.list() shouldEqual
 
         verify { usersPort.list() }
+    }
 
+    @Test
+    fun `LoginName, Passwordが一致すればログインでき、セッションを生成すること`() {
+        val user = mockk<User>()
+        every { usersPort.findBy(LoginName("foo"), Password("bar")) } returns user
+
+//        usecase.
     }
 }

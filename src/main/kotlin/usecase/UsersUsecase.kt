@@ -14,10 +14,9 @@ class UsersUsecase {
         return CreateResponse.from(user)
     }
 
-//    fun login(request: LoginRequest): Session {
-//        val user = services.users.findBy(request.loginName, request.password)
-//        return services.sessions.create(user)
-//    }
+    fun login(request: LoginRequest): Session {
+        TODO("実装しろ")
+    }
 
 //    fun logout(sessionId: String) {
 //        return
