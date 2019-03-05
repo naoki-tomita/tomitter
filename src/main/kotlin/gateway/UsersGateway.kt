@@ -5,8 +5,7 @@ import driver.Database
 import port.UsersPort
 
 class UsersGateway: UsersPort {
-
-    val driver: Database = Database()
+    val driver = Singleton.get(Database::class) as Database
 
     override fun findBy(id: UserId): User? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

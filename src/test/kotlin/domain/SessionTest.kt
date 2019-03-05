@@ -6,6 +6,6 @@ import org.junit.jupiter.api.Test
 class SessionTest {
     @Test
     fun SessionCodeを生成するとランダムなStringを生成する() {
-        SessionCode().value.length shouldEqual 8
+        SessionCode.create().value.length shouldEqual 8
     }
 }

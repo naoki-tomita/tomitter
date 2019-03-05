@@ -2,27 +2,35 @@ package usecase
 
 import domain.*
 import gateway.UsersGateway
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.verify
+import io.mockk.*
 import org.amshove.kluent.invoking
+import org.amshove.kluent.mock
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import port.SessionPort
 import port.UsersPort
 
 class UsecaseTest {
 
     lateinit var usecase: UsersUsecase
     lateinit var usersPort: UsersPort
+    lateinit var sessionPort: SessionPort
 
     @BeforeEach
-    fun usecaseとusersPortを初期化する() {
+    fun `usecaseとusersPort, sessionPortを初期化する`() {
         usecase = UsersUsecase()
         usersPort = mockk<UsersPort>()
+        sessionPort = mockk<SessionPort>()
         usecase.usersPort = usersPort
+        usecase.sessionPort = sessionPort
+    }
+
+    @AfterEach
+    fun `後処理を行う`() {
+        unmockkAll()
     }
 
     @Test
@@ -54,19 +62,26 @@ class UsecaseTest {
     @Test
     fun ユーザーの一覧を取得すること() {
         val users = mockk<Users>()
+        val filteredUser = mockk<FilteredUser>()
+        val response = mockk<ListResponse>()
 
         every { usersPort.list() } returns users
+        mockkObject(ListResponse.Companion)
+        every { ListResponse.Companion.from(users) } returns response
 
-        usecase.list() shouldEqual
+        usecase.list() shouldEqual response
 
         verify { usersPort.list() }
+        verify { ListResponse.from(users) }
     }
 
     @Test
     fun `LoginName, Passwordが一致すればログインでき、セッションを生成すること`() {
         val user = mockk<User>()
+        val session = mockk<Session>()
         every { usersPort.findBy(LoginName("foo"), Password("bar")) } returns user
+        every { sessionPort.create(SessionCode("code"), UserId(0)) } returns session
 
-//        usecase.
+        usecase.login(LoginRequest("foo", "bar")) shouldEqual session
     }
 }

@@ -1,11 +1,13 @@
 package usecase
 
 import domain.*
+import port.SessionPort
 import port.UsersPort
 
 class UsersUsecase {
 
     lateinit var usersPort: UsersPort
+    lateinit var sessionPort: SessionPort
 
     fun create(request: CreateRequest): CreateResponse {
         val loginName = LoginName(request.loginName)

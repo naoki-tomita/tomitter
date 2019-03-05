@@ -1,6 +1,9 @@
 package rest
 
 import domain.CreateRequest
+import domain.User
+import gateway.SessionGateway
+import gateway.Singleton
 import gateway.UsersGateway
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -9,6 +12,8 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
+import port.SessionPort
+import port.UsersPort
 import usecase.UsersUsecase
 
 /**
@@ -17,7 +22,11 @@ import usecase.UsersUsecase
  * restはExceptionをハンドルして、レスポンスを返す。
  */
 
-val usecase = UsersUsecase().let { it.usersPort = UsersGateway();it }
+val usecase = UsersUsecase().let {
+    it.usersPort = UsersGateway()
+    it.sessionPort = SessionGateway()
+    it
+}
 
 fun Route.create() {
     post("/users") {

@@ -12,6 +12,7 @@ import org.sqlite.SQLiteException
 class Database {
 
     val users = UsersTable()
+    val sessions = SessionTable()
 
     init {
         Database.connect("jdbc:sqlite:./data.db", "org.sqlite.JDBC")
@@ -69,12 +70,32 @@ class UsersTable {
     }
 }
 
+class SessionTable {
+    fun create(sessionCode: String, userId: Int): Session {
+        return transaction {
+            val id = Sessions.insertAndGetId {
+                it[Sessions.sessionCode] = sessionCode
+                it[Sessions.userId] = userId
+            }
+            Session(SessionId(id.value), SessionCode.from(sessionCode), UserId(userId))
+        }
+    }
+
+    fun revoke(sessionCode: String) {
+        transaction {
+            Sessions.deleteWhere {
+                Sessions.sessionCode eq sessionCode
+            }
+        }
+    }
+}
+
 object Users: IntIdTable() {
     val loginName: Column<String> = Users.varchar("login_name", 50).uniqueIndex()
     val password: Column<String> = Users.varchar("password", 50)
 }
 
 object Sessions: IntIdTable() {
-    val sessionId: Column<String> = Sessions.varchar("session_id", 50).uniqueIndex()
+    val sessionCode: Column<String> = Sessions.varchar("session_code", 50).uniqueIndex()
     val userId: Column<Int> = Sessions.integer("user_id")
 }
