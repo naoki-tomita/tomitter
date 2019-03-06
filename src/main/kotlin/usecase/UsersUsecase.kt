@@ -17,16 +17,21 @@ class UsersUsecase {
     }
 
     fun login(request: LoginRequest): Session {
-        TODO("実装しろ")
+        val user = usersPort.findBy(LoginName(request.loginName), Password(request.password))
+        val session = sessionPort.create(SessionCode.create(), user.id)
+        return session
     }
 
 //    fun logout(sessionId: String) {
 //        return
 //    }
 
-//    fun identify(sessionId: String): User {
-//        return User(0, "foo", "bar")
-//    }
+    fun identify(sessionCode: SessionCode): IdentifyResponse {
+        return sessionPort.findBy(sessionCode)
+            .let { usersPort.findBy(it.userId) }
+            .let { IdentifyResponse(it.id.value, it.loginName.value) }
+
+    }
 
     fun list(): ListResponse {
         val users = usersPort.list()

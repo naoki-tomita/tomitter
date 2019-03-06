@@ -79,9 +79,35 @@ class UsecaseTest {
     fun `LoginName, Passwordが一致すればログインでき、セッションを生成すること`() {
         val user = mockk<User>()
         val session = mockk<Session>()
+        val userId = mockk<UserId>()
         every { usersPort.findBy(LoginName("foo"), Password("bar")) } returns user
-        every { sessionPort.create(SessionCode("code"), UserId(0)) } returns session
+        every { sessionPort.create(any(), userId) } returns session
+        every { user.id } returns userId
 
         usecase.login(LoginRequest("foo", "bar")) shouldEqual session
+    }
+
+    @Test
+    fun 受け取ったSessionCodeからユーザーを特定すること() {
+        val sessionCode = mockk<SessionCode>()
+        val session = mockk<Session>()
+        val userId = mockk<UserId>()
+        val user = mockk<User>()
+        val response = IdentifyResponse(0, "foo")
+
+        every { sessionPort.findBy(sessionCode) } returns session
+        every { session.userId } returns userId
+        every { usersPort.findBy(userId) } returns user
+        every { user.id.value } returns 0
+        every { user.loginName.value } returns "foo"
+
+        usecase.identify(sessionCode) shouldEqual response
+
+        verify { sessionPort.findBy(sessionCode) }
+        verify { session.userId }
+        verify { usersPort.findBy(userId) }
+        verify { user.id.value }
+        verify { user.loginName.value }
+
     }
 }

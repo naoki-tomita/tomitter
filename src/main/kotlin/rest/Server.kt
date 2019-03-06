@@ -29,20 +29,20 @@ fun createServer() =
             list()
 //            post("/users/login") {
 //                try {
-//                    val request = call.receive<LoginRequest>()
-//                    val session = login(request)
-//                    call.response.header("set-cookie", "AUTH-SESSION=${session.sessionId.id}")
-//                    call.respond("")
-//                } catch (e: PasswordDidNotMatchException) {
-//                    e.printStackTrace()
-//                    call.respond(HttpStatusCode.BadRequest, ErrorResponse("login_failed", "Invalid login parameter."))
-//                } catch (e: UserNotFoundException) {
-//                    e.printStackTrace()
-//                    call.respond(HttpStatusCode.BadRequest, ErrorResponse("login_failed", "Invalid login parameter."))
-//                } catch (e: Throwable) {
-//                    e.printStackTrace()
-//                    call.respond(HttpStatusCode.InternalServerError, ErrorResponse("internal_error", e.toString()))
-//                }
+////                    val request = call.receive<LoginRequest>()
+////                    val session = login(request)
+////                    call.response.header("set-cookie", "AUTH-SESSION=${session.sessionId.id}")
+////                    call.respond("")
+////                } catch (e: PasswordDidNotMatchException) {
+////                    e.printStackTrace()
+////                    call.respond(HttpStatusCode.BadRequest, ErrorResponse("login_failed", "Invalid login parameter."))
+////                } catch (e: UserNotFoundException) {
+////                    e.printStackTrace()
+////                    call.respond(HttpStatusCode.BadRequest, ErrorResponse("login_failed", "Invalid login parameter."))
+////                } catch (e: Throwable) {
+////                    e.printStackTrace()
+////                    call.respond(HttpStatusCode.InternalServerError, ErrorResponse("internal_error", e.toString()))
+////                }
 //            }
 //        }
     }

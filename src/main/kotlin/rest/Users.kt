@@ -1,14 +1,18 @@
 package rest
 
 import domain.CreateRequest
+import domain.LoginRequest
 import domain.User
 import gateway.SessionGateway
 import gateway.Singleton
 import gateway.UsersGateway
 import io.ktor.application.call
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
+import io.ktor.response.header
 import io.ktor.response.respond
+import io.ktor.response.respondText
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -45,6 +49,10 @@ fun Route.create() {
 fun Route.login() {
     post("/users/login") {
         try {
+            val request = call.receive<LoginRequest>()
+            val session = usecase.login(request)
+            call.response.header("set-cookie", "AUTH-SESSION=${session.sessionCode.value}")
+            call.respondText("{}", ContentType.Application.Json)
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)

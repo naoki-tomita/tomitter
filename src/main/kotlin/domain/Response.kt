@@ -34,3 +34,5 @@ data class ErrorResponse(val code: String, val message: String) {
         }
     }
 }
+
+data class IdentifyResponse(val id: Int, val loginName: String)

@@ -32,7 +32,7 @@ class UsersTable {
                     it[Users.loginName] = loginName
                     it[Users.password] = password
                 }
-                User(UserId(id.value), LoginName(loginName), Password(password))
+                User(id.value, loginName, password)
             } catch (e: Exception) {
                 val original = e.cause
                 when (original) {
@@ -57,7 +57,7 @@ class UsersTable {
         if (users.count() == 0) {
             throw UserNotFoundException(LoginName(loginName))
         }
-        if (users.first().password.value != password) {
+        if (users.first().password != password) {
             throw PasswordDidNotMatchException()
         }
         return users.first()
@@ -65,7 +65,7 @@ class UsersTable {
 
     companion object {
         private fun queryToUsers(query: Query): List<User> {
-            return query.map { User.from(it[Users.id].value, it[Users.loginName], it[Users.password]) }
+            return query.map { User(it[Users.id].value, it[Users.loginName], it[Users.password]) }
         }
     }
 }
@@ -77,24 +77,25 @@ class SessionTable {
                 it[Sessions.sessionCode] = sessionCode
                 it[Sessions.userId] = userId
             }
-            Session(SessionId(id.value), SessionCode.from(sessionCode), UserId(userId))
+            Session(id.value, sessionCode, userId)
         }
     }
 
     fun revoke(sessionCode: String) {
         transaction {
-            Sessions.deleteWhere {
-                Sessions.sessionCode eq sessionCode
-            }
+            Sessions.deleteWhere { Sessions.sessionCode eq sessionCode }
         }
     }
 }
 
+data class User(val id: Int, val loginName: String, val password: String)
 object Users: IntIdTable() {
     val loginName: Column<String> = Users.varchar("login_name", 50).uniqueIndex()
     val password: Column<String> = Users.varchar("password", 50)
 }
 
+
+data class Session(val id: Int, val sessionCode: String, val userId: Int)
 object Sessions: IntIdTable() {
     val sessionCode: Column<String> = Sessions.varchar("session_code", 50).uniqueIndex()
     val userId: Column<Int> = Sessions.integer("user_id")
