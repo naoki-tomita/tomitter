@@ -2,6 +2,7 @@ package rest
 
 import domain.CreateRequest
 import domain.LoginRequest
+import domain.SessionCode
 import domain.User
 import gateway.SessionGateway
 import gateway.Singleton
@@ -35,9 +36,9 @@ val usecase = UsersUsecase().let {
 fun Route.create() {
     post("/users") {
         try {
-            val request = call.receive<CreateRequest>()
-            val response = usecase.create(request)
-            call.respond(HttpStatusCode.OK, response)
+            call.receive<CreateRequest>()
+                .let { usecase.create(it) }
+                .let { call.respond(HttpStatusCode.OK, it) }
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)
@@ -49,10 +50,12 @@ fun Route.create() {
 fun Route.login() {
     post("/users/login") {
         try {
-            val request = call.receive<LoginRequest>()
-            val session = usecase.login(request)
-            call.response.header("set-cookie", "AUTH-SESSION=${session.sessionCode.value}")
-            call.respondText("{}", ContentType.Application.Json)
+            call.receive<LoginRequest>()
+                .let { usecase.login(it) }
+                .let {
+                    call.response.header("set-cookie", "AUTH-SESSION=${it.sessionCode.value}")
+                    call.respondText("{}", ContentType.Application.Json)
+                }
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)
@@ -64,6 +67,9 @@ fun Route.login() {
 fun Route.identify() {
     get("/users/identify") {
         try {
+            (call.request.cookies["AUTH-SESSION"] ?: "")
+                .let { usecase.identify(SessionCode(it)) }
+                .let { call.respond(it) }
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)
@@ -75,8 +81,8 @@ fun Route.identify() {
 fun Route.list() {
     get("/users") {
         try {
-            val response = usecase.list()
-            call.respond(response)
+            usecase.list()
+                .let { call.respond(it) }
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)

@@ -8,7 +8,7 @@ class UsersGateway: UsersPort {
     val driver = Singleton.get(Database::class) as Database
 
     override fun findBy(id: UserId): User {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return driver.users.findBy(id.value).let { User(UserId(it.id), LoginName(it.loginName), Password(it.password)) }
     }
 
     override fun findBy(loginName: LoginName, password: Password): User {

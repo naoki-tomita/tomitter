@@ -11,7 +11,8 @@ class SessionGateway: SessionPort {
     val driver = Singleton.get(Database::class) as Database
 
     override fun create(sessionCode: SessionCode, userId: UserId): Session {
-        return driver.sessions.create(sessionCode.value, userId.value).let { Session(SessionId(it.id), sessionCode, userId) }
+        return driver.sessions.create(sessionCode.value, userId.value)
+            .let { Session(SessionId(it.id), sessionCode, userId) }
     }
 
     override fun revoke(sessionCode: SessionCode) {
@@ -19,6 +20,7 @@ class SessionGateway: SessionPort {
     }
 
     override fun findBy(sessionCode: SessionCode): Session {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return driver.sessions.findBy(sessionCode.value)
+            .let { Session(SessionId(it.id), sessionCode, UserId(it.userId)) }
     }
 }

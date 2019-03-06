@@ -108,6 +108,5 @@ class UsecaseTest {
         verify { usersPort.findBy(userId) }
         verify { user.id.value }
         verify { user.loginName.value }
-
     }
 }

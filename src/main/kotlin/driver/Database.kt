@@ -63,6 +63,14 @@ class UsersTable {
         return users.first()
     }
 
+    fun findBy(userId: Int): User {
+        val users = transaction { Companion.queryToUsers(Users.select { Users.id eq userId }) }
+        if (users.count() == 0) {
+            throw SessionDidNotFoundException()
+        }
+        return users.first()
+    }
+
     companion object {
         private fun queryToUsers(query: Query): List<User> {
             return query.map { User(it[Users.id].value, it[Users.loginName], it[Users.password]) }
@@ -84,6 +92,15 @@ class SessionTable {
     fun revoke(sessionCode: String) {
         transaction {
             Sessions.deleteWhere { Sessions.sessionCode eq sessionCode }
+        }
+    }
+
+    fun findBy(sessionCode: String): Session {
+        try {
+            return transaction { Sessions.select { Sessions.sessionCode eq sessionCode }
+                .map { Session(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) } }.first()
+        } catch (e: Throwable) {
+            throw SessionDidNotFoundException()
         }
     }
 }

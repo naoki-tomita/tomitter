@@ -10,16 +10,13 @@ class UsersUsecase {
     lateinit var sessionPort: SessionPort
 
     fun create(request: CreateRequest): CreateResponse {
-        val loginName = LoginName(request.loginName)
-        val password = Password(request.password)
-        val user = usersPort.create(loginName, password)
-        return CreateResponse.from(user)
+        return usersPort.create(LoginName(request.loginName), Password(request.password))
+            .let { CreateResponse.from(it) }
     }
 
     fun login(request: LoginRequest): Session {
-        val user = usersPort.findBy(LoginName(request.loginName), Password(request.password))
-        val session = sessionPort.create(SessionCode.create(), user.id)
-        return session
+        return usersPort.findBy(LoginName(request.loginName), Password(request.password))
+            .let { sessionPort.create(SessionCode.create(), it.id) }
     }
 
 //    fun logout(sessionId: String) {
@@ -34,8 +31,8 @@ class UsersUsecase {
     }
 
     fun list(): ListResponse {
-        val users = usersPort.list()
-        return ListResponse.from(users)
+        return usersPort.list()
+            .let { ListResponse.from(it) }
     }
 
 }
