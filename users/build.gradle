@@ -49,3 +49,22 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.3.1"
     testImplementation 'org.amshove.kluent:kluent:1.48'
 }
+
+// アプリのエントリポイントを指定する
+// gradle runで実行できるようになる
+apply plugin: "application"
+// fun main()の記載されている場所がMain.ktファイルの場合、Main"Kt"と、"Kt"をつければよい。
+mainClassName = "MainKt"
+
+jar {
+    manifest {
+        // jarを生成する際のエントリポイントを指定する
+        attributes 'Main-Class': "MainKt"
+    }
+    // 依存しているものを全部jarにつめこむコマンド。よーわからん
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}

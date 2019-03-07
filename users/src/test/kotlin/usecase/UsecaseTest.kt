@@ -49,7 +49,6 @@ class UsecaseTest {
     fun すでに同じIDが存在する場合作成に失敗しエラーを投げること() {
         val loginName = LoginName("loginName")
         val password = Password("password")
-        val user = User(UserId(0), loginName, password)
 
         every { usersPort.create(loginName, password) } throws UserAlreadyExistException(loginName)
 
@@ -62,7 +61,6 @@ class UsecaseTest {
     @Test
     fun ユーザーの一覧を取得すること() {
         val users = mockk<Users>()
-        val filteredUser = mockk<FilteredUser>()
         val response = mockk<ListResponse>()
 
         every { usersPort.list() } returns users
