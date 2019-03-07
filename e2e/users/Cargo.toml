@@ -5,3 +5,5 @@ authors = ["naoki.tomita <mxcpy608@hotmail.com>"]
 edition = "2018"
 
 [dependencies]
+reqwest = "*"
+serde_json = "*"
