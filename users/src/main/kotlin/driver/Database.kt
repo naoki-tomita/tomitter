@@ -55,7 +55,7 @@ class UsersTable {
     fun findBy(loginName: String, password: String): User {
         val users = transaction { Companion.queryToUsers(Users.select { Users.loginName eq loginName }) }
         if (users.count() == 0) {
-            throw UserNotFoundException(LoginName(loginName))
+                throw UserNotFoundException(LoginName(loginName))
         }
         if (users.first().password != password) {
             throw PasswordDidNotMatchException()
@@ -97,8 +97,10 @@ class SessionTable {
 
     fun findBy(sessionCode: String): Session {
         try {
-            return transaction { Sessions.select { Sessions.sessionCode eq sessionCode }
-                .map { Session(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) } }.first()
+            return transaction {
+                Sessions.select { Sessions.sessionCode eq sessionCode }
+                    .map { Session(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) }
+            }.first()
         } catch (e: Throwable) {
             throw SessionDidNotFoundException()
         }
@@ -106,14 +108,14 @@ class SessionTable {
 }
 
 data class User(val id: Int, val loginName: String, val password: String)
-object Users: IntIdTable() {
+object Users : IntIdTable() {
     val loginName: Column<String> = Users.varchar("login_name", 50).uniqueIndex()
     val password: Column<String> = Users.varchar("password", 50)
 }
 
 
 data class Session(val id: Int, val sessionCode: String, val userId: Int)
-object Sessions: IntIdTable() {
+object Sessions : IntIdTable() {
     val sessionCode: Column<String> = Sessions.varchar("session_code", 50).uniqueIndex()
     val userId: Column<Int> = Sessions.integer("user_id")
 }

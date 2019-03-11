@@ -9,6 +9,7 @@ import gateway.Singleton
 import gateway.UsersGateway
 import io.ktor.application.call
 import io.ktor.http.ContentType
+import io.ktor.http.Cookie
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.header
@@ -53,7 +54,7 @@ fun Route.login() {
             call.receive<LoginRequest>()
                 .let { usecase.login(it) }
                 .let {
-                    call.response.header("set-cookie", "AUTH-SESSION=${it.sessionCode.value}")
+                    call.response.header("set-cookie", "AUTH-SESSION=${it.sessionCode.value};")
                     call.respondText("{}", ContentType.Application.Json)
                 }
         } catch (e: Throwable) {

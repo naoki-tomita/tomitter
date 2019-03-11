@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@types/react": "^16.8.7",
+    "@types/react-dom": "^16.8.2",
+    "parcel-bundler": "^1.12.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "name": "web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.3.3333"
+  }
+}
