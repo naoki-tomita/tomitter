@@ -4,7 +4,7 @@ const { create, findByUserId, findByCookie } = require("../usecase/profile");
 
 const app = express();
 app.use(bodyParser.json());
-app.get("/profiles/:userId", async (req, res) => {
+app.get("/v1/profiles/:userId", async (req, res) => {
   try {
     const userId = req.param("userId");
     const profile = await findByUserId(userId);
@@ -15,7 +15,7 @@ app.get("/profiles/:userId", async (req, res) => {
   }
 });
 
-app.post("/profiles", async (req, res) => {
+app.post("/v1/profiles", async (req, res) => {
   try {
     const { userId, displayName, description } = req.body;
     const profile = await create(userId, displayName, description);
@@ -26,7 +26,7 @@ app.post("/profiles", async (req, res) => {
   }
 });
 
-app.get("/profiles", async (req, res) => {
+app.get("/v1/profiles", async (req, res) => {
   try {
     const cookie = req.header("cookie");
     const profile = await findByCookie(cookie);
