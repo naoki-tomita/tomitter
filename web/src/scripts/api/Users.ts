@@ -3,8 +3,10 @@ interface User {
   loginName: string;
 }
 
+const BASE_PATH = "http://localhost/v1/users"
+
 export async function login(loginName: string, password: string): Promise<User> {
-  const response = await fetch("http://localhost/users/login", {
+  const response = await fetch(`${BASE_PATH}/login`, {
     method: "POST",
     headers: { "content-type": "application/json; charset=UTF-8" },
     body: JSON.stringify({ loginName, password }),
@@ -16,7 +18,7 @@ export async function login(loginName: string, password: string): Promise<User> 
 }
 
 export async function create(loginName: string, password: string): Promise<User> {
-  const response = await fetch("http://localhost/users", {
+  const response = await fetch(`${BASE_PATH}`, {
     method: "POST",
     headers: { "content-type": "application/json; charset=UTF-8" },
     body: JSON.stringify({ loginName, password }),
@@ -28,7 +30,7 @@ export async function create(loginName: string, password: string): Promise<User>
 }
 
 export async function list(): Promise<User[]>{
-  const response = await fetch("http://localhost/users");
+  const response = await fetch(`${BASE_PATH}`);
   if (response.ok) {
     return await response.json();
   }
