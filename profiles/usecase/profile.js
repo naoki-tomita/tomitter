@@ -19,7 +19,8 @@ exports.findByUserId = async function findByUserId(userId) {
 }
 
 exports.findByCookie = async function findByCookie(cookie) {
-  return await findProfileByUserId(await getIdentifiedUser(cookie));
+  const user = await getIdentifiedUser(cookie);
+  return await findProfileByUserId(user.id);
 }
 
 exports.list = async function() {

@@ -5,50 +5,73 @@ import { create, me, list, profile } from "../api/Profiles";
 import { LabeledInput } from "../components/LabeledInput";
 const { useState } = React;
 
+interface State {
+  displayNameInput: string;
+  descriptionInput: string;
+  displayName: string;
+  description: string;
+  userId: number;
+}
+
 export const Profile: React.FunctionComponent = () => {
-  const [displayName, setDisplayName] = useState("");
-  const [description, setDescription] = useState("");
-  const [userId, setUserId] = useState(0);
+  const [state, setState] = useState<State>({
+    displayNameInput: "",
+    descriptionInput: "",
+    displayName: "",
+    description: "",
+    userId: 0,
+  });
+  const {
+    displayNameInput, descriptionInput,
+    displayName, description,
+    userId,
+  } = state;
 
   async function createProfile() {
-    await create(displayName, description);
+    await create(displayNameInput, descriptionInput);
     await myProfile();
   }
 
   async function myProfile() {
-    const profile = await me();
-    setDisplayName(profile.displayName);
-    setDescription(profile.description);
+    const { displayName, description } = await me();
+    setState({
+      ...state,
+      displayName,
+      description,
+    });
   }
 
   async function specifiedProfile(userId: number) {
-    const fetchedProfile = await profile(userId);
-    setDisplayName(fetchedProfile.displayName);
-    setDescription(fetchedProfile.description);
+    const { displayName, description } = await profile(userId);
+    setState({
+      ...state,
+      displayName,
+      description,
+    })
   }
 
   return (
     <>
       <LabeledInput
         label="displayName"
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
+        value={displayNameInput}
+        onChange={(e) => setState({ ...state, displayNameInput: e.target.value })}
       />
       <LabeledInput
         label="description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={descriptionInput}
+        onChange={(e) => setState({ ...state, descriptionInput: e.target.value })}
       />
       <LabeledInput
         label="userId"
         value={userId.toString()}
-        onChange={(e) => setUserId(parseInt(e.target.value, 10))}
+        onChange={(e) => setState({ ...state, userId: parseInt(e.target.value, 10) })}
       />
       <LabelAndValue label="id" value={displayName}/>
       <LabelAndValue label="id" value={description}/>
       <Button onClick={() => createProfile()}>create</Button>
-      <Button onClick={async () => myProfile()}>me</Button>
-      <Button onClick={async () => specifiedProfile(userId)}>id</Button>
+      <Button onClick={() => myProfile()}>me</Button>
+      <Button onClick={() => specifiedProfile(userId)}>id</Button>
     </>
   );
 }

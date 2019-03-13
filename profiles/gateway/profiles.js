@@ -19,9 +19,9 @@ exports.list = async function list() {
 }
 
 exports.findByUserId = async function findByUserId(userId) {
-  return await get(`
+  return Profile.from(await get(`
     select * from profile where user_id = ${userId};
-  `);
+  `));
 }
 
 exports.findById = async function findById(id) {
@@ -32,12 +32,12 @@ exports.findById = async function findById(id) {
 
 exports.create = async function create(profile) {
   const { userId, displayName, description } = profile;
-  console.log(userId, displayName, description);
+  await exec(`delete from profile where user_id = ${userId}`);
   await exec(`
     insert into profile (user_id, display_name, description)
       values (${userId}, "${displayName}", "${description}");
   `);
   return Profile.from(await get(`
-    select * from profile user_id = ${userId};
+    select * from profile where user_id = ${userId};
   `));
 }
