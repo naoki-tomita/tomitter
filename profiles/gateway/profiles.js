@@ -3,7 +3,7 @@ const { get, all, exec } = require("../driver/database");
 
 exports.init = async function init() {
   await exec(`
-    create table profile (
+    create table if not exists profile (
       id integer primary key,
       user_id integer unique,
       display_name text,
@@ -32,6 +32,7 @@ exports.findById = async function findById(id) {
 
 exports.create = async function create(profile) {
   const { userId, displayName, description } = profile;
+  console.log(userId, displayName, description);
   await exec(`
     insert into profile (user_id, display_name, description)
       values (${userId}, "${displayName}", "${description}");

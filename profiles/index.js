@@ -1,1 +1,3 @@
-require("./rest/profile")
+const { init } = require("./gateway/profiles");
+require("./rest/profile");
+init();

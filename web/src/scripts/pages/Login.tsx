@@ -1,6 +1,7 @@
 import * as React from "react";
-import { create, login } from "../api/Users";
-import { Input } from "../elements/Input";
+import { create, login, identify } from "../api/Users";
+import { LabeledInput } from "../components/LabeledInput";
+import { Button } from "../elements/Button";
 const { useState } = React;
 
 export const Login = () => {
@@ -8,28 +9,30 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   return (
     <>
+      <LabeledInput
+        label="login name"
+        value={loginName}
+        onChange={
+          (x: React.ChangeEvent<HTMLInputElement>) => setLoginName(x.target.value)
+        }
+      />
+      <LabeledInput
+        label="password"
+        value={password}
+        type="password"
+        onChange={
+          (x: React.ChangeEvent<HTMLInputElement>) => setPassword(x.target.value)
+        }
+      />
       <div>
-        login name:
-        <Input
-          value={loginName}
-          onChange={
-            (x: React.ChangeEvent<HTMLInputElement>) => setLoginName(x.target.value)
+        <Button onClick={() => create(loginName, password)}>create</Button>
+        <Button onClick={() => login(loginName, password)}>login</Button>
+        <Button onClick={
+          async () => {
+            const user = await identify()
+            alert(JSON.stringify(user));
           }
-        />
-      </div>
-      <div>
-        password:
-        <Input
-          value={password}
-          type="password"
-          onChange={
-            (x: React.ChangeEvent<HTMLInputElement>) => setPassword(x.target.value)
-          }
-        />
-      </div>
-      <div>
-        <button onClick={() => create(loginName, password)}>create</button>
-        <button onClick={() => login(loginName, password)}>login</button>
+        }>identify</Button>
       </div>
     </>
   );

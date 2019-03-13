@@ -54,12 +54,15 @@ fun Route.login() {
             call.receive<LoginRequest>()
                 .let { usecase.login(it) }
                 .let {
-                    call.response.header("set-cookie", "AUTH-SESSION=${it.sessionCode.value};")
+                    call.response.header("set-cookie", "AUTH-SESSION=${it.sessionCode.value}; path=/;")
                     call.respondText("{}", ContentType.Application.Json)
                 }
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)
+            if (pair.first == HttpStatusCode.Forbidden) {
+                call.response.header("set-cookie", "AUTH-SESSION=;")
+            }
             call.respond(pair.first, pair.second)
         }
     }
