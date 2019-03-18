@@ -1,5 +1,6 @@
 const { Profile, Profiles } = require("../domain/profiles");
 const { get, all, exec } = require("../driver/database");
+const { ProfileNotFoundError } = require("../domain/errors");
 
 exports.init = async function init() {
   await exec(`
@@ -19,9 +20,13 @@ exports.list = async function list() {
 }
 
 exports.findByUserId = async function findByUserId(userId) {
-  return Profile.from(await get(`
+  const profile = await get(`
     select * from profile where user_id = ${userId};
-  `));
+  `);
+  if (!profile) {
+    throw new ProfileNotFoundError(`Profile for ${userId} is not found.`);
+  }
+  return Profile.from(profile);
 }
 
 exports.findById = async function findById(id) {

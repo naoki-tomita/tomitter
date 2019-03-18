@@ -4,35 +4,59 @@ import { LabeledInput } from "../components/LabeledInput";
 import { Button } from "../elements/Button";
 const { useState } = React;
 
-export const Login = () => {
-  const [loginName, setLoginName] = useState("");
-  const [password, setPassword] = useState("");
+interface State {
+  loginName: string;
+  password: string;
+  failedToLogin: boolean;
+  failedToCreate: boolean;
+}
+
+export const Login: React.FunctionComponent<{
+  onLoggedIn: () => void;
+}> = ({ onLoggedIn }) => {
+  const [state, setState] = useState<State>({
+    loginName: "",
+    password: "",
+    failedToLogin: false,
+    failedToCreate: false,
+  });
+  const { loginName, password } = state;
+
+  async function createUser() {
+    try {
+      await create(loginName, password);
+      setState({ ...state, loginName: "", password: "" });
+    } catch (e) {
+      setState({ ...state, failedToCreate: true });
+    }
+  }
+
+  async function loginUser() {
+    try {
+      await login(loginName, password);
+      setState({ ...state, loginName: "", password: "" });
+      onLoggedIn();
+    } catch (e) {
+      setState({ ...state, failedToLogin: true });
+    }
+  }
+
   return (
     <>
       <LabeledInput
         label="login name"
         value={loginName}
-        onChange={
-          (x: React.ChangeEvent<HTMLInputElement>) => setLoginName(x.target.value)
-        }
+        onChange={({ target }) => setState({ ...state, loginName: target.value })}
       />
       <LabeledInput
         label="password"
         value={password}
         type="password"
-        onChange={
-          (x: React.ChangeEvent<HTMLInputElement>) => setPassword(x.target.value)
-        }
+        onChange={({ target }) => setState({ ...state, password: target.value })}
       />
       <div>
-        <Button onClick={() => create(loginName, password)}>create</Button>
-        <Button onClick={() => login(loginName, password)}>login</Button>
-        <Button onClick={
-          async () => {
-            const user = await identify()
-            alert(JSON.stringify(user));
-          }
-        }>identify</Button>
+        <Button onClick={() => }>create</Button>
+        <Button onClick={() => }>login</Button>
       </div>
     </>
   );

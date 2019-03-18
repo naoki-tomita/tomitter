@@ -1,7 +1,11 @@
 const { User } = require("../domain/users");
 const { identify } = require("../driver/http");
+const { UserNotFoundError } = require("../domain/errors");
 
 exports.getIdentifiedUser = async function getIdentifiedUser(cookie) {
-  const userObject = await identify(cookie);
-  return User.from(userObject);
+  const user = await identify(cookie);
+  if (!user) {
+    throw new UserNotFoundError("User not found.");
+  }
+  return User.from(user);
 }

@@ -1,10 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { create, findByUserId, findByCookie, list } = require("../usecase/profile");
-
-function findSession(cookie) {
-  return cookie.split(";").map(it => it.trim()).find(it => it.startsWith("AUTH-SESSION"));
-}
+const { handle } = require("./error-handler");
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,7 +17,8 @@ app.get("/v1/profiles/me", async (req, res) => {
     }
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "unexpected_error", message: e });
+    const { status, error } = handle(e);
+    res.status(status).json(error);
   }
 });
 
@@ -35,7 +33,8 @@ app.get("/v1/profiles/:userId", async (req, res) => {
     }
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "unexpected_error", message: e });
+    const { status, error } = handle(e);
+    res.status(status).json(error);
   }
 });
 
@@ -47,7 +46,8 @@ app.post("/v1/profiles", async (req, res) => {
     res.json(profile);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "unexpected_error", message: e });
+    const { status, error } = handle(e);
+    res.status(status).json(error);
   }
 });
 
@@ -57,7 +57,8 @@ app.get("/v1/profiles", async (req, res) => {
     res.json(profiles);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "unexpected_error", message: e });
+    const { status, error } = handle(e);
+    res.status(status).json(error);
   }
 });
 
