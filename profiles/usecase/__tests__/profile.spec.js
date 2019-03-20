@@ -2,7 +2,7 @@ jest.mock("../../gateway/profiles");
 jest.mock("../../gateway/users");
 const { when } = require("jest-when");
 const { User } = require("../../domain/users");
-const { Profile, Profiles } = require("../../domain/profiles");
+const { Profile } = require("../../domain/profiles");
 const { getIdentifiedUser } = require("../../gateway/users");
 const { create: createProfile, findByUserId } = require("../../gateway/profiles");
 const { create, findByCookie } = require("../profile");
