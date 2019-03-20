@@ -1,8 +1,11 @@
 import * as React from "react";
+import styled from "styled-components";
+
 import { create, login, identify } from "../api/Users";
 import { LabeledInput } from "../components/LabeledInput";
 import { Button } from "../elements/Button";
-const { useState } = React;
+import console = require("console");
+const { useState, useEffect } = React;
 
 interface State {
   loginName: string;
@@ -10,6 +13,10 @@ interface State {
   failedToLogin: boolean;
   failedToCreate: boolean;
 }
+
+const Flex = styled.div`
+  display: flex;
+`;
 
 export const Login: React.FunctionComponent<{
   onLoggedIn: () => void;
@@ -41,23 +48,34 @@ export const Login: React.FunctionComponent<{
     }
   }
 
+  useEffect(() => {
+    (async () => {
+      try {
+        await identify();
+        onLoggedIn();
+      } catch (e) {}
+    })();
+  });
+
   return (
     <>
       <LabeledInput
         label="login name"
         value={loginName}
-        onChange={({ target }) => setState({ ...state, loginName: target.value })}
+        onChange={({ target }) =>
+          setState({ ...state, loginName: target.value })}
       />
       <LabeledInput
         label="password"
         value={password}
         type="password"
-        onChange={({ target }) => setState({ ...state, password: target.value })}
+        onChange={({ target }) =>
+          setState({ ...state, password: target.value })}
       />
-      <div>
-        <Button onClick={() => }>create</Button>
-        <Button onClick={() => }>login</Button>
-      </div>
+      <Flex>
+        <Button onClick={createUser}>create</Button>
+        <Button onClick={loginUser}>login</Button>
+      </Flex>
     </>
   );
 }

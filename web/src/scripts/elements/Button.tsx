@@ -7,7 +7,7 @@ export const Button = styled.button`
   color: #333;
   font-size: 16px;
   border-radius: 4px;
-  margin: 4px 0;
+  margin: 4px 4px;
   outline: none;
 
   &:active {

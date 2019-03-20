@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Label = styled.div`
   font-size: 16px;
-  color: #ccc;
+  color: #666;
 
   &::after {
     content: ": "
@@ -11,5 +11,5 @@ export const Label = styled.div`
 
 export const Value = styled.div`
   font-size: 16px;
-  color: #ccc;
+  color: #666;
 `;
