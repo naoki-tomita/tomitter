@@ -1,11 +1,23 @@
 import * as React from "react";
-import { Header } from "./Header";
+import styled from "styled-components";
 
-export const Container: React.FunctionComponent = ({ children }) => {
+import { Header } from "./Header";
+import { Mode } from "../../Types";
+
+const CenteredContainer = styled.div`
+  width: 768px;
+  margin: 0 auto;
+`;
+
+interface Props {
+  isLoggedIn: boolean;
+}
+
+export const Container: React.FunctionComponent<Props> = ({ children, isLoggedIn }) => {
   return (
-    <>
-      <Header></Header>
+    <CenteredContainer>
+      <Header isLoggedIn={isLoggedIn}/>
       {children}
-    </>
+    </CenteredContainer>
   );
 };
