@@ -10,6 +10,7 @@ export const Label = styled.div`
 `
 
 export const Value = styled.div`
+  padding-left: 4px;
   font-size: 16px;
   color: #666;
 `;

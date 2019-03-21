@@ -28,12 +28,14 @@ interface TweetProps {
 }
 
 const Tweet: React.FunctionComponent<TweetProps> = ({ onSend }) => {
+  const [value, setValue] = useState("");
+
   async function send() {
     value && await sendTweet(value);
+    setValue("");
     onSend();
   }
 
-  const [value, setValue] = useState("");
   return (
     <Flex>
       <LabeledInput value={value} label="How about you?" onChange={e => setValue(e.target.value)} />
@@ -42,19 +44,21 @@ const Tweet: React.FunctionComponent<TweetProps> = ({ onSend }) => {
   );
 }
 
-type Tweet = string;
+type TweetData = string;
 
 interface AllContentProps {
-  match: match,
-  tweets: Tweet[]
+  parentPath: string,
+  tweets: TweetData[]
 }
 
-const AllContent: React.FunctionComponent<AllContentProps> = ({ match, tweets }) => {
+const AllContent: React.FunctionComponent<AllContentProps> = ({ parentPath, tweets }) => {
   return (
     <ListContainer>
       {tweets.map((value, key) => (
         <ListItem key={key}>
-          <Link to={`${match.url}/${key}`}>{value}</Link>
+          <Link to={`${parentPath}/${key}`} style={{ textDecoration: "none" }}>
+            <Content>{value}</Content>
+          </Link>
         </ListItem>
       ))}
     </ListContainer>
@@ -62,19 +66,28 @@ const AllContent: React.FunctionComponent<AllContentProps> = ({ match, tweets })
 }
 
 interface ContentProps {
-  tweet: Tweet;
 }
 
-const Content: React.FunctionComponent<ContentProps> = ({ tweet }) => {
-  return <div>{tweet}</div>;
+const TweetContents = styled.div`
+  background-color: #eee;
+  border-radius: 12px;
+  padding: 12px;
+  color: black;
+  margin-bottom: 8px;
+`;
+
+const Content: React.FunctionComponent<ContentProps> = ({ children }) => {
+  return <TweetContents>{children}</TweetContents>;
 }
 
 export const ContentPage: React.ComponentType<RouteComponentProps<{}>> = ({ match }) => {
   const [ tweets, setTweets ] = useState([]);
 
   async function fetchTweets() {
-    const tweets = await me();
-    setTweets(tweets);
+    try {
+      const tweets = await me();
+      setTweets(tweets);
+    } catch (e) {}
   }
 
   useEffect(() => { fetchTweets() }, []);
@@ -82,8 +95,8 @@ export const ContentPage: React.ComponentType<RouteComponentProps<{}>> = ({ matc
   return (
     <>
       <Tweet onSend={fetchTweets} />
-      <Route exact path={`${match.url}`} component={({ match }) => <AllContent match={match} tweets={tweets} />} />
-      <Route path={`${match.url}/:id`} component={({ match }) => <Content tweet={tweets[match.params.id]}/>} />
+      <Route exact path={`${match.url}`} component={({ match }) => <AllContent parentPath={match.url} tweets={tweets} />} />
+      <Route path={`${match.url}/:id`} component={({ match }) => <Content>{tweets[match.params.id]}</Content>} />
     </>
   );
 }

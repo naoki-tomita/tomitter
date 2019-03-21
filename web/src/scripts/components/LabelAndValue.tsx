@@ -5,6 +5,7 @@ import { Label, Value } from "../elements/Label";
 
 const Flex = styled.div`
   display: flex;
+  padding-left: 8px;
 `;
 
 export const LabelAndValue: React.FunctionComponent<{

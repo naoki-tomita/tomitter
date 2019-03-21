@@ -14,23 +14,29 @@ def user(cookies)
   user = JSON.parse(response.body)
 end
 
+def user_tweets(user_id)
+  $redis.lrange(user_id, 0, -1)
+end
+
+def all_tweets
+  $redis.keys.map { |user|
+    $redis.lrange(user, 0, -1).map { |item|
+      { user: user, list: item }
+    }
+  }
+end
+
 class Tweet < Grape::API
   format :json
   namespace :v1 do
     namespace :tw do
       get "/" do
-        keys = $redis.keys
-        keys.map { |user|
-          $redis.lrange(user, 0, 1000).map { |item|
-            { user: user, list: item }
-          }
-        }
+        all_tweets
       end
 
       namespace :users do
         get "/me/tweets" do
-          result = user(cookies)
-          $redis.lrange(result["id"], 0, 1000)
+          user_tweets(user(cookies)["id"])
         end
 
         post "/me/tweets" do
@@ -40,8 +46,7 @@ class Tweet < Grape::API
         end
 
         get "/:id/tweets" do
-          user_id = params[:id]
-          $redis.lrange(user_id, 0, 1000)
+          user_tweets(params[:id])
         end
       end
     end

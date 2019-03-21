@@ -9,15 +9,20 @@ const CenteredContainer = styled.div`
   margin: 0 auto;
 `;
 
+const PaddedContent = styled.div`
+  padding-top: 68px;
+`;
+
 interface Props {
-  isLoggedIn: boolean;
 }
 
-export const Container: React.FunctionComponent<Props> = ({ children, isLoggedIn }) => {
+export const Container: React.FunctionComponent<Props> = ({ children }) => {
   return (
     <CenteredContainer>
-      <Header isLoggedIn={isLoggedIn}/>
-      {children}
+      <Header />
+      <PaddedContent>
+        {children}
+      </PaddedContent>
     </CenteredContainer>
   );
 };

@@ -24,7 +24,6 @@ const Title = () => {
 };
 
 interface Props {
-  isLoggedIn: boolean;
 }
 
 const Margin = styled.div`
@@ -65,25 +64,36 @@ const Flex = styled.div`
   justify-content: space-between;
 `;
 
-const Background = styled(Flex)`
+const Background = styled.div`
+  height: 60px;
+  position: fixed;
   background-color: #eee;
-  border: 1px solid #bbb;
+  left: 0;
+  right: 0;
+  box-shadow: 6px 0px 6px #aaa;
 `;
 
-export const Header: React.FunctionComponent<Props> = ({ isLoggedIn }) => {
+const HeaderSpace = styled(Flex)`
+  width: 768;
+  margin: 0 auto;
+`;
+
+export const Header: React.FunctionComponent<Props> = () => {
   return (
     <Background>
-      <Flex>
-        <Link to="/app/content" style={{ textDecoration: "none" }}>
-          <Title />
-        </Link>
-        <Search />
-      </Flex>
-      <Flex>
-        <Link to="/app/profile">
-          <ProfileMenu />
-        </Link>
-      </Flex>
+      <HeaderSpace>
+        <Flex>
+          <Link to="/app/content" style={{ textDecoration: "none" }}>
+            <Title />
+          </Link>
+          <Search />
+        </Flex>
+        <Flex>
+          <Link to="/app/profile">
+            <ProfileMenu />
+          </Link>
+        </Flex>
+      </HeaderSpace>
     </Background>
   );
 };

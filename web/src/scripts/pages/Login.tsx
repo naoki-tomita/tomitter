@@ -5,7 +5,7 @@ import { create, login, identify } from "../api/Users";
 import { LabeledInput } from "../components/LabeledInput";
 import { Button } from "../elements/Button";
 import { Redirect } from "react-router-dom";
-import console = require("console");
+import { useGlobalState } from "../Store";
 const { useState, useEffect } = React;
 
 interface State {
@@ -13,7 +13,6 @@ interface State {
   password: string;
   failedToLogin: boolean;
   failedToCreate: boolean;
-  isLoggedIn: boolean;
 }
 
 const Flex = styled.div`
@@ -28,24 +27,22 @@ const Centered = styled.div`
 `;
 
 interface Props {
-  onLoggedIn: () => void;
 }
 
-const Login: React.FunctionComponent<Props> = ({ onLoggedIn }) => {
+const Login: React.FunctionComponent<Props> = () => {
   const [state, setState] = useState<State>({
     loginName: "",
     password: "",
     failedToLogin: false,
     failedToCreate: false,
-    isLoggedIn: false,
   });
-  const { loginName, password, isLoggedIn } = state;
+  const [isLoggedIn, setIsLoggedIn] = useGlobalState("isLoggedIn");
+  const { loginName, password } = state;
 
   async function identifyUser() {
     try {
       await identify();
-      setState({ ...state, isLoggedIn: true });
-      onLoggedIn();
+      setIsLoggedIn(true);
     } catch (e) {}
   }
 
@@ -63,8 +60,8 @@ const Login: React.FunctionComponent<Props> = ({ onLoggedIn }) => {
   async function loginUser() {
     try {
       await login(loginName, password);
-      setState({ ...state, loginName: "", password: "", isLoggedIn: true });
-      onLoggedIn();
+      setState({ ...state, loginName: "", password: "" });
+      setIsLoggedIn(true);
     } catch (e) {
       setState({ ...state, failedToLogin: true });
     }
@@ -99,6 +96,6 @@ const Login: React.FunctionComponent<Props> = ({ onLoggedIn }) => {
   );
 }
 
-export const LoginPage: React.FunctionComponent<Props> = ({ onLoggedIn }) => {
-  return <Login onLoggedIn={onLoggedIn} />
+export const LoginPage: React.FunctionComponent<Props> = () => {
+  return <Login />
 }

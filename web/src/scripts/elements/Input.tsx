@@ -14,6 +14,7 @@ export const Input = styled.input`
   padding: 4px 8px;
   font-size: 16px;
   transition: 0.2s;
+  width: 100%;
 
   &:hover, &:focus {
     box-shadow: 0px 2px 4px #888;
