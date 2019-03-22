@@ -1,8 +1,7 @@
 import * as React from "react";
+
 import { LabelAndValue } from "../components/LabelAndValue";
-import { Button } from "../elements/Button";
-import { create, me, list, profile } from "../api/Profiles";
-import { LabeledInput } from "../components/LabeledInput";
+import { me } from "../api/Profiles";
 const { useState, useEffect } = React;
 
 interface State {
