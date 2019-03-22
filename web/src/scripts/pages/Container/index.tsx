@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 
 import { Header } from "./Header";
-import { Mode } from "../../Types";
 
 const CenteredContainer = styled.div`
   width: 768px;

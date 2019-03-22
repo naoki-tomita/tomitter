@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import { RouteComponentProps, Link, Route, match } from "react-router-dom";
 import { me, send as sendTweet } from "../../api/Tweets";
-import { Input } from "../../elements/Input";
 import { Button } from "../../elements/Button";
 import { LabeledInput } from "../../components/LabeledInput";
 const { useEffect, useState } = React;
@@ -38,7 +37,7 @@ const Tweet: React.FunctionComponent<TweetProps> = ({ onSend }) => {
 
   return (
     <Flex>
-      <LabeledInput value={value} label="How about you?" onChange={e => setValue(e.target.value)} />
+      <LabeledInput value={value} label="How about you?" onChange={t => setValue(t)} />
       <Button onClick={send}>tweet</Button>
     </Flex>
   );
@@ -74,6 +73,11 @@ const TweetContents = styled.div`
   padding: 12px;
   color: black;
   margin-bottom: 8px;
+  transition: 0.3s;
+
+  &:hover {
+    box-shadow: 0px 2px 3px #bbb;
+  }
 `;
 
 const Content: React.FunctionComponent<ContentProps> = ({ children }) => {

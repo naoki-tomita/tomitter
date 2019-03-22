@@ -77,15 +77,15 @@ const Login: React.FunctionComponent<Props> = () => {
       <LabeledInput
         label="ID"
         value={loginName}
-        onChange={({ target }) =>
-          setState({ ...state, loginName: target.value })}
+        onChange={t =>
+          setState({ ...state, loginName: t })}
       />
       <LabeledInput
         label="Password"
         value={password}
         type="password"
-        onChange={({ target }) =>
-          setState({ ...state, password: target.value })}
+        onChange={t =>
+          setState({ ...state, password: t })}
       />
       <Flex>
         <Button onClick={createUser}>create</Button>

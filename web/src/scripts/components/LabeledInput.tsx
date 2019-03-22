@@ -12,12 +12,15 @@ const PaddingLeft = styled.div`
   padding-left: 8px;
 `;
 
-export const LabeledInput: React.FunctionComponent<{
+interface Props {
   label: string;
   type?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ label, type, value, onChange }) => {
+  onChange: (text: string) => void;
+  onEnter?: () => void;
+}
+
+export const LabeledInput: React.FunctionComponent<Props>= ({ label, type, value, onChange }) => {
   const [hasFocused, setFocused] = useState(false);
   return (
     <Margin>
@@ -28,7 +31,7 @@ export const LabeledInput: React.FunctionComponent<{
         placeholder={label}
         type={type}
         value={value}
-        onChange={onChange}
+        onChange={e => (onChange(e.target.value))}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />

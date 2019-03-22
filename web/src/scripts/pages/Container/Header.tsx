@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Input } from "../../elements/Input";
-import { Mode } from "../../Types";
 import { Link } from "react-router-dom";
 
 const TitleEl = styled.div`
@@ -15,6 +14,11 @@ const TitleEl = styled.div`
   border-radius: 40px;
   color: black;
   text-decoration: none;
+  transition: 0.3s;
+
+  &:hover {
+    box-shadow: 0 3px 3px #ccc;
+  }
 `;
 
 const Title = () => {
