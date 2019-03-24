@@ -2,6 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import { Input } from "../../elements/Input";
 import { Link } from "react-router-dom";
+import { Profile } from "../Profile";
+const { useState } = React;
 
 const TitleEl = styled.div`
   margin-left: 8px;
@@ -56,9 +58,11 @@ const Square = styled.div`
   }
 `;
 
-const ProfileMenu = () => {
+const ProfileMenu: React.FunctionComponent<{ onClick: () => void }> = ({ onClick }) => {
   return (
-    <Square/>
+    <div style={{ position: "relative", right: 0 }}>
+      <Square onClick={onClick}/>
+    </div>
   );
 }
 
@@ -82,22 +86,44 @@ const HeaderSpace = styled(Flex)`
   margin: 0 auto;
 `;
 
+// export const Header: React.FunctionComponent<Props> = () => {
+//   const [state, setState] = useState(false);
+//   return (
+//     <Background>
+//       <HeaderSpace>
+//         <Flex>
+//           <Link to="/app/content" style={{ textDecoration: "none" }}>
+//             <Title />
+//           </Link>
+//           <Search />
+//         </Flex>
+//           {/* <Link to="/app/profile">
+//             <ProfileMenu />
+//           </Link> */}
+//           <div>
+//           <ProfileMenu onClick={() => setState(!state)}/>
+//           {state ? <Flex><Menu/></Flex> : null}
+//           </div>
+//       </HeaderSpace>
+//     </Background>
+//   );
+// };
+
 export const Header: React.FunctionComponent<Props> = () => {
+  const [state, setState] = useState(false);
   return (
-    <Background>
-      <HeaderSpace>
-        <Flex>
-          <Link to="/app/content" style={{ textDecoration: "none" }}>
-            <Title />
-          </Link>
-          <Search />
-        </Flex>
-        <Flex>
-          <Link to="/app/profile">
-            <ProfileMenu />
-          </Link>
-        </Flex>
-      </HeaderSpace>
-    </Background>
+    <div className="background"></div>
   );
 };
+
+const MenuContainer = styled.div`
+  background-color: #fff;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: solid 1px #bbb;
+`;
+
+const Menu = () => {
+  return <MenuContainer>Hello?</MenuContainer>
+}
