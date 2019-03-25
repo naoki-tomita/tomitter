@@ -112,7 +112,30 @@ const HeaderSpace = styled(Flex)`
 export const Header: React.FunctionComponent<Props> = () => {
   const [state, setState] = useState(false);
   return (
-    <div className="background"></div>
+    // 外枠。色と高さと位置とpositionを指定する
+    <div style={{ backgroundColor: "#888", position: "fixed", top: 0, left: 0, right: 0 }}>
+      {/* flexの為の内枠。コンテンツと同様に横幅を768pxに設定し、中央寄せにする。
+          3分割し、左、真ん中、右でそれぞれ 1:3:1のスペースにする
+          */}
+      <div style={{
+        position: "relative",
+        display: "flex",
+        width: 768,
+        height: 60,
+        margin: "auto",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}>
+        <div style={{ flexGrow: 1 }}>
+          {/* 幅がタイトルよりも長くなってしまうのでflexすることで、小さくする */}
+          {/* <div style={{ display: "flex" }}><Title/></div> */}
+        </div>
+        <div style={{ flexGrow: 3 }}>
+          <Input />
+        </div>
+        <div style={{ flexGrow: 1 }}>bar</div>
+      </div>
+    </div>
   );
 };
 
