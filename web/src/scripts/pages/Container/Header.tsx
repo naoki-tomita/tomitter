@@ -3,18 +3,17 @@ import styled from "styled-components";
 import { Input } from "../../elements/Input";
 import { Link } from "react-router-dom";
 import { Profile } from "../Profile";
+import { MiniProfile } from "./MiniProfile";
 const { useState } = React;
 
 const TitleEl = styled.div`
-  margin-left: 8px;
   font-weight: bold;
   font-size: 32px;
   padding: 0 12px;
-  margin: 4px;
   font-family: 'Baloo Chettan', cursive;
   background-color: #fff;
   border-radius: 40px;
-  color: black;
+  color: #000;
   text-decoration: none;
   transition: 0.3s;
 
@@ -23,9 +22,30 @@ const TitleEl = styled.div`
   }
 `;
 
+const Flex1 = styled.div`
+  flex: 1;
+`;
+
+const Flex1Right = styled(Flex1)`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Flex3 = styled.div`
+  flex: 3;
+`;
+
+const TitleWrap = styled(Flex1)`
+  display: flex;
+`;
+
 const Title = () => {
   return (
-    <TitleEl>Tomitter</TitleEl>
+    <TitleWrap>
+      <Link to="/app/content" style={{ textDecoration: "none" }}>
+        <TitleEl>Tomitter</TitleEl>
+      </Link>
+    </TitleWrap>
   );
 };
 
@@ -38,13 +58,34 @@ const Margin = styled.div`
 
 const Search = () => {
   return (
-    <Margin>
-      <Input onChange={() => ({})} placeholder="Search"/>
-    </Margin>
+    <Flex3>
+      <Margin>
+        <Input onChange={() => ({})} placeholder="Search"/>
+      </Margin>
+    </Flex3>
   );
 }
 
-const Square = styled.div`
+const Background = styled.div`
+  position: fixed;
+  background-color: #eee;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 6px 0px 6px #aaa;
+`;
+
+const FlexWrap = styled.div`
+  position: relative;
+  display: flex;
+  width: 768px;
+  height: 60px;
+  margin: auto;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const MenuBox = styled.div`
   width: 40px;
   height: 40px;
   margin: 4px;
@@ -58,95 +99,61 @@ const Square = styled.div`
   }
 `;
 
-const ProfileMenu: React.FunctionComponent<{ onClick: () => void }> = ({ onClick }) => {
-  return (
-    <div style={{ position: "relative", right: 0 }}>
-      <Square onClick={onClick}/>
-    </div>
-  );
-}
-
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+const Menu = styled.div`
+  position: absolute;
+  padding: 16px;
+  top: 56px;
+  right: 0;
+  box-shadow: 0 4px 6px #999;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 `;
 
-const Background = styled.div`
-  height: 60px;
+const Backdrop = styled.div`
   position: fixed;
-  background-color: #eee;
+  top: 0;
   left: 0;
   right: 0;
-  box-shadow: 6px 0px 6px #aaa;
+  bottom: 0;
 `;
 
-const HeaderSpace = styled(Flex)`
-  width: 768;
-  margin: 0 auto;
-`;
+const MenuContent: React.FunctionComponent<{ onClose: () => void; }> = ({ onClose }) => {
+  return (
+    <>
+      <Backdrop onClick={onClose}/>
+      <Menu>
+        <MiniProfile />
+        <Link
+          to="/app/profile"
+          style={{ textDecoration: "none" }}
+          onClick={onClose}
+        >
+          プロフィールを編集
+        </Link>
+      </Menu>
+    </>
+  );
+}
 
-// export const Header: React.FunctionComponent<Props> = () => {
-//   const [state, setState] = useState(false);
-//   return (
-//     <Background>
-//       <HeaderSpace>
-//         <Flex>
-//           <Link to="/app/content" style={{ textDecoration: "none" }}>
-//             <Title />
-//           </Link>
-//           <Search />
-//         </Flex>
-//           {/* <Link to="/app/profile">
-//             <ProfileMenu />
-//           </Link> */}
-//           <div>
-//           <ProfileMenu onClick={() => setState(!state)}/>
-//           {state ? <Flex><Menu/></Flex> : null}
-//           </div>
-//       </HeaderSpace>
-//     </Background>
-//   );
-// };
+const ProfileMenu = () => {
+  const [isShow, setIsShow] = useState(false);
+  return (
+    <Flex1Right>
+      <MenuBox onClick={() => setIsShow(true)}/>
+      { isShow && <MenuContent onClose={() => setIsShow(false)}/> }
+    </Flex1Right>
+  );
+}
 
 export const Header: React.FunctionComponent<Props> = () => {
-  const [state, setState] = useState(false);
   return (
-    // 外枠。色と高さと位置とpositionを指定する
-    <div style={{ backgroundColor: "#888", position: "fixed", top: 0, left: 0, right: 0 }}>
-      {/* flexの為の内枠。コンテンツと同様に横幅を768pxに設定し、中央寄せにする。
-          3分割し、左、真ん中、右でそれぞれ 1:3:1のスペースにする
-          */}
-      <div style={{
-        position: "relative",
-        display: "flex",
-        width: 768,
-        height: 60,
-        margin: "auto",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}>
-        <div style={{ flexGrow: 1 }}>
-          {/* 幅がタイトルよりも長くなってしまうのでflexすることで、小さくする */}
-          {/* <div style={{ display: "flex" }}><Title/></div> */}
-        </div>
-        <div style={{ flexGrow: 3 }}>
-          <Input />
-        </div>
-        <div style={{ flexGrow: 1 }}>bar</div>
-      </div>
-    </div>
+    <Background>
+      <FlexWrap>
+        <Title />
+        <Search />
+        <ProfileMenu />
+      </FlexWrap>
+    </Background>
   );
 };
-
-const MenuContainer = styled.div`
-  background-color: #fff;
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border: solid 1px #bbb;
-`;
-
-const Menu = () => {
-  return <MenuContainer>Hello?</MenuContainer>
-}
