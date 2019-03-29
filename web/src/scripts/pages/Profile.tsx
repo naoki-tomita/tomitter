@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { LabelAndValue } from "../components/LabelAndValue";
 import { me } from "../api/Profiles";
+import { t } from "../utils/I18n";
 const { useState, useEffect } = React;
 
 interface State {
@@ -29,8 +30,8 @@ export const Profile: React.FunctionComponent = () => {
 
   return (
     <>
-      <LabelAndValue label="display name" value={displayName}/>
-      <LabelAndValue label="description" value={description}/>
+      <LabelAndValue label={t("profile.displayName")} value={displayName}/>
+      <LabelAndValue label={t("profile.description")} value={description}/>
     </>
   );
 }
