@@ -9,13 +9,17 @@ class UsersUsecase {
     lateinit var usersPort: UsersPort
     lateinit var sessionPort: SessionPort
 
+    // Responseという名前は不適切
     fun create(request: CreateRequest): CreateResponse {
         return usersPort.create(LoginName(request.loginName), Password(request.password))
             .let { CreateResponse.from(it) }
     }
 
     fun login(request: LoginRequest): Session {
-        return usersPort.findBy(LoginName(request.loginName), Password(request.password))
+        val loginName = LoginName(request.loginName)
+        val password = Password(request.password)
+        return ((usersPort.findBy(loginName) ?: throw UserNotFoundException(loginName))
+            .takeIf { it.password.matches(password) } ?: throw PasswordDidNotMatchException())
             .let { sessionPort.create(SessionCode.create(), it.id) }
     }
 
@@ -25,8 +29,8 @@ class UsersUsecase {
 
     fun identify(sessionCode: SessionCode): IdentifyResponse {
         return sessionPort.findBy(sessionCode)
-            .let { usersPort.findBy(it.userId) }
-            .let { IdentifyResponse(it.id.value, it.loginName.value) }
+            ?.let { usersPort.findBy(it.userId) }
+            ?.let { IdentifyResponse(it.id.value, it.loginName.value) } ?: throw SessionDidNotFoundException()
 
     }
 

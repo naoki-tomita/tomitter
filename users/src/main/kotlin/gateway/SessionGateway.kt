@@ -19,8 +19,7 @@ class SessionGateway: SessionPort {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun findBy(sessionCode: SessionCode): Session {
-        return driver.sessions.findBy(sessionCode.value)
-            .let { Session(SessionId(it.id), sessionCode, UserId(it.userId)) }
+    override fun findBy(sessionCode: SessionCode): Session? {
+        return driver.sessions.findBy(sessionCode.value)?.let { Session(SessionId(it.id), sessionCode, UserId(it.userId)) }
     }
 }

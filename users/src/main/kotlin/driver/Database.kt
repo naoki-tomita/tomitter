@@ -52,24 +52,11 @@ class UsersTable {
         return transaction { Companion.queryToUsers(Users.selectAll()) }
     }
 
-    fun findBy(loginName: String, password: String): User {
-        val users = transaction { Companion.queryToUsers(Users.select { Users.loginName eq loginName }) }
-        if (users.count() == 0) {
-                throw UserNotFoundException(LoginName(loginName))
-        }
-        if (users.first().password != password) {
-            throw PasswordDidNotMatchException()
-        }
-        return users.first()
-    }
+    fun findBy(loginName: String): User? =
+        transaction { Companion.queryToUsers(Users.select { Users.loginName eq loginName }) }.firstOrNull()
 
-    fun findBy(userId: Int): User {
-        val users = transaction { Companion.queryToUsers(Users.select { Users.id eq userId }) }
-        if (users.count() == 0) {
-            throw SessionDidNotFoundException()
-        }
-        return users.first()
-    }
+    fun findBy(userId: Int): User? =
+        transaction { Companion.queryToUsers(Users.select { Users.id eq userId }) }.firstOrNull()
 
     companion object {
         private fun queryToUsers(query: Query): List<User> {
@@ -95,15 +82,11 @@ class SessionTable {
         }
     }
 
-    fun findBy(sessionCode: String): Session {
-        try {
-            return transaction {
-                Sessions.select { Sessions.sessionCode eq sessionCode }
-                    .map { Session(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) }
-            }.first()
-        } catch (e: Throwable) {
-            throw SessionDidNotFoundException()
-        }
+    fun findBy(sessionCode: String): Session? {
+        return transaction {
+            Sessions.select { Sessions.sessionCode eq sessionCode }
+                .map { Session(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) }
+        }.firstOrNull()
     }
 }
 

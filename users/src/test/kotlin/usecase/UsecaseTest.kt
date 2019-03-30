@@ -78,11 +78,28 @@ class UsecaseTest {
         val user = mockk<User>()
         val session = mockk<Session>()
         val userId = mockk<UserId>()
-        every { usersPort.findBy(LoginName("foo"), Password("bar")) } returns user
+        every { usersPort.findBy(LoginName("foo")) } returns user
+        every { user.password.matches(Password("bar")) } returns true
         every { sessionPort.create(any(), userId) } returns session
         every { user.id } returns userId
 
         usecase.login(LoginRequest("foo", "bar")) shouldEqual session
+    }
+
+    @Test
+    fun `LoginNameに該当するユーザーが存在しなければUserNotFoundExceptionを投げること`() {
+        every { usersPort.findBy(LoginName("foo")) } returns null
+
+        { usecase.login(LoginRequest("foo", "bar")) } shouldThrow UserNotFoundException::class
+    }
+
+    @Test
+    fun `パスワードが一致しなければ、PasswordDidNotMatchExceptionを投げること`() {
+        val user = mockk<User>()
+        every { usersPort.findBy(LoginName("foo")) } returns user
+        every { user.password.matches(Password("bar")) } returns false
+
+        { usecase.login(LoginRequest("foo", "bar")) } shouldThrow PasswordDidNotMatchException::class
     }
 
     @Test
