@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`I18n #init should fetch resource 1`] = `
+Object {
+  "default": Object {
+    "profile": Object {
+      "description": "Self introduction",
+      "displayName": "Name",
+    },
+  },
+  "profile": Object {
+    "description": "Self introduction",
+    "displayName": "Name",
+  },
+}
+`;
