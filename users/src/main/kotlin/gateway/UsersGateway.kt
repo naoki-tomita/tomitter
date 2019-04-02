@@ -2,10 +2,11 @@ package gateway
 
 import domain.*
 import driver.Database
+import inject
 import port.UsersPort
 
 class UsersGateway: UsersPort {
-    val driver = Singleton.get(Database::class) as Database
+    val driver: Database = inject()
 
     override fun findBy(id: UserId): User {
         return driver.users.findBy(id.value).let { User(UserId(it.id), LoginName(it.loginName), Password(it.password)) }
