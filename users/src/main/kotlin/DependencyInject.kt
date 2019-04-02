@@ -6,3 +6,7 @@ inline fun <reified T: Any>register(instance: T, `as`: Class<*>? = null) {
 inline fun <reified T: Any> inject(): T {
     return map[T::class.java] as T
 }
+
+fun reset() {
+    map.clear()
+}
