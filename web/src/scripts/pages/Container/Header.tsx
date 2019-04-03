@@ -4,6 +4,7 @@ import { Input } from "../../elements/Input";
 import { Link } from "react-router-dom";
 import { Profile } from "../Profile";
 import { MiniProfile } from "./MiniProfile";
+import { t } from "../../utils/I18n";
 const { useState } = React;
 
 const TitleEl = styled.div`
@@ -129,7 +130,7 @@ const MenuContent: React.FunctionComponent<{ onClose: () => void; }> = ({ onClos
           style={{ textDecoration: "none" }}
           onClick={onClose}
         >
-          プロフィールを編集
+          {t("profile.edit")}
         </Link>
       </Menu>
     </>

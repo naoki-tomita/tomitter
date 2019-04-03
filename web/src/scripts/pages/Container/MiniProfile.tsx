@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { me } from "../../api/Profiles";
+import { t } from "../../utils/I18n";
 const { useEffect, useState } = React;
 
 const DisplayName = styled.div`
@@ -36,8 +37,8 @@ export const MiniProfile = () => {
 
   return (
     <>
-      <DisplayName>なまえ: {displayName}</DisplayName>
-      <Description>プロフィール: {description}</Description>
+      <DisplayName>{t("profile.displayName")}: {displayName}</DisplayName>
+      <Description>{t("profile.description")}: {description}</Description>
     </>
   );
 }

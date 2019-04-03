@@ -44,5 +44,5 @@ export async function create(displayName: string, description: string) {
   if (response.ok) {
     return await response.json();
   }
-  throw Error("Failed to fetch profiles.");
+  throw Error("Failed to create profiles.");
 }

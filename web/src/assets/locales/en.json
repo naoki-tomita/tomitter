@@ -1,6 +1,10 @@
 {
   "profile": {
     "displayName": "Name",
-    "description": "Self introduction"
+    "description": "Self introduction",
+    "edit": "Edit"
+  },
+  "common": {
+    "change": "Change"
   }
 }
