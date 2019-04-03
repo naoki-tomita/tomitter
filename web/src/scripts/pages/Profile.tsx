@@ -6,6 +6,7 @@ import { t } from "../utils/I18n";
 import { LabeledInput } from "../components/LabeledInput";
 import { Button } from "../elements/Button";
 import styled from "styled-components";
+import { useGlobalState } from "../Store";
 const { useState, useEffect } = React;
 
 interface State {
@@ -15,27 +16,26 @@ interface State {
 
 const Right = styled.div`
   display: flex;
-  justify-content: reverse;
+  justify-content: flex-end;
 `;
 
 export const Profile: React.FunctionComponent = () => {
-  const [state, setState] = useState<State>({
-    displayName: "",
-    description: "",
-  });
+  const [state, setState] = useState<State>({ displayName: "", description: "" });
+  const [profile, setProfile] = useGlobalState("profile");
   const { displayName, description } = state;
 
   async function fetchProfile() {
     const { displayName, description } = await me();
-    setState({
-      ...state,
-      displayName,
-      description,
-    });
+    setState({ displayName, description });
   }
 
   async function updateProfile() {
     await create(displayName, description);
+    setProfile({
+      ...profile,
+      displayName,
+      description,
+    });
   }
 
   useEffect(() => { fetchProfile(); }, [])

@@ -1,4 +1,9 @@
 {
+  "header": {
+    "title": {
+      "label": "トミッター"
+    }
+  },
   "profile": {
     "displayName": "Name",
     "description": "Self introduction",
@@ -6,5 +11,9 @@
   },
   "common": {
     "change": "Change"
+  },
+  "tweet": {
+    "placeholder": "How about you?",
+    "tweet": "Tweet"
   }
 }

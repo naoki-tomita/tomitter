@@ -1,4 +1,9 @@
 {
+  "header": {
+    "title": {
+      "label": "Tomitter"
+    }
+  },
   "profile": {
     "displayName": "名前",
     "description": "自己紹介",
@@ -6,5 +11,9 @@
   },
   "common": {
     "change": "変更する"
+  },
+  "tweet": {
+    "placeholder": "何かいいことあった？",
+    "tweet": "呟く"
   }
 }

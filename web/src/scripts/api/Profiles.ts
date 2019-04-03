@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost/v1/profiles";
 
-interface Profile {
+export interface Profile {
   id: number;
   userId: number;
   displayName: string;

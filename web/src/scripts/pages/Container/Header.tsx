@@ -11,12 +11,14 @@ const TitleEl = styled.div`
   font-weight: bold;
   font-size: 32px;
   padding: 0 12px;
-  font-family: 'Baloo Chettan', cursive;
+  font-family: 'Baloo Chettan', 'M PLUS Rounded 1c', cursive;
   background-color: #fff;
   border-radius: 40px;
   color: #000;
   text-decoration: none;
   transition: 0.3s;
+  width: 160px;
+  text-align: center;
 
   &:hover {
     box-shadow: 0 3px 3px #ccc;
@@ -44,7 +46,7 @@ const Title = () => {
   return (
     <TitleWrap>
       <Link to="/app/content" style={{ textDecoration: "none" }}>
-        <TitleEl>Tomitter</TitleEl>
+        <TitleEl>{t("header.title.label")}</TitleEl>
       </Link>
     </TitleWrap>
   );
