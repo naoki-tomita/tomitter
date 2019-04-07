@@ -5,7 +5,7 @@ import { handle } from "./ErrorHandler";
 import { inject } from "omusubi";
 import { ProfileUsecase } from "../usecase/profile";
 import { Cookie } from "../domain/cookie";
-import { Description } from "../domain/profiles";
+import { Description, Profile, Profiles } from "../domain/profiles";
 import { Name } from "../domain/Name";
 
 export class ProfileResource {
@@ -21,7 +21,7 @@ export class ProfileResource {
       try {
         const cookie = req.header("cookie") || "";
         const profile = await this.profileUsecase.findByCookie(new Cookie(cookie));
-        res.json(profile);
+        res.json(toProfileJson(profile));
       } catch (e) {
         console.error(e);
         const { status, error } = handle(e);
@@ -33,7 +33,7 @@ export class ProfileResource {
       try {
         const { userId } = req.params;
         const profile = await this.profileUsecase.findByUserId(userId);
-        res.json(profile);
+        res.json(toProfileJson(profile));
       } catch (e) {
         console.error(e);
         const { status, error } = handle(e);
@@ -50,7 +50,7 @@ export class ProfileResource {
           new Name(displayName),
           new Description(description),
         );
-        res.json(profile);
+        res.json(toProfileJson(profile));
       } catch (e) {
         console.error(e);
         const { status, error } = handle(e);
@@ -61,7 +61,7 @@ export class ProfileResource {
     app.get("/v1/profiles", async (_, res) => {
       try {
         const profiles = await this.profileUsecase.list();
-        res.json(profiles);
+        res.json(toProfilesJson(profiles));
       } catch (e) {
         console.error(e);
         const { status, error } = handle(e);
@@ -72,4 +72,24 @@ export class ProfileResource {
     app.listen(8082);
 
   }
+}
+
+function toProfileJson(profile: Profile): ProfileJson {
+  const { id, userId, displayName, description } = profile;
+  return { id: id.value, userId: userId.value, displayName: displayName.value, description: description.value };
+}
+
+function toProfilesJson(profiles: Profiles): ProfilesJson {
+  return { profiles: profiles.map(toProfileJson) };
+}
+
+interface ProfileJson {
+  id: number;
+  userId: number;
+  displayName: string;
+  description: string;
+}
+
+interface ProfilesJson {
+  profiles: ProfileJson[]
 }
