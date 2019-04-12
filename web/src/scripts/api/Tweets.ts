@@ -1,6 +1,17 @@
 const BASE_PATH = "http://localhost/v1/tw"
+
+type Tweet = string;
+
 export async function me() {
   const response = await fetch(`${BASE_PATH}/users/me/tweets`);
+  if (response.ok) {
+    return await response.json();
+  }
+  throw Error("tweet error");
+}
+
+export async function userTweet(userId: string): Promise<Tweet[]> {
+  const response = await fetch(`${BASE_PATH}/users/${userId}/tweets`);
   if (response.ok) {
     return await response.json();
   }

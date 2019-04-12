@@ -36,13 +36,13 @@ const Login: React.FunctionComponent<Props> = () => {
     failedToLogin: false,
     failedToCreate: false,
   });
-  const [isLoggedIn, setIsLoggedIn] = useGlobalState("isLoggedIn");
+  const [ user, setUser ] = useGlobalState("user");
   const { loginName, password } = state;
 
   async function identifyUser() {
     try {
-      await identify();
-      setIsLoggedIn(true);
+      const user = await identify();
+      setUser(user);
     } catch (e) {}
   }
 
@@ -61,13 +61,13 @@ const Login: React.FunctionComponent<Props> = () => {
     try {
       await login(loginName, password);
       setState({ ...state, loginName: "", password: "" });
-      setIsLoggedIn(true);
+      await identifyUser();
     } catch (e) {
       setState({ ...state, failedToLogin: true });
     }
   }
 
-  if (isLoggedIn) {
+  if (user.id !== -1) {
     return <Redirect to="/app" />;
   }
 

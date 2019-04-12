@@ -1,16 +1,13 @@
 import { createGlobalState } from "react-hooks-global-state";
-
-interface User {
-  id: number;
-  loginName: string;
-}
+import { User } from "./api/Users";
+import { Profile } from "./api/Profiles";
 
 export interface GlobalState {
-  isLoggedIn: boolean;
-  userInfo?: User;
+  user: User;
+  profile: Profile;
 }
 
 export const { GlobalStateProvider, useGlobalState } = createGlobalState<GlobalState>({
-  isLoggedIn: false,
-  userInfo: null,
+  user: { id: -1, loginName: "" },
+  profile: { id: -1, userId: -1, description: "", displayName: "" },
 });

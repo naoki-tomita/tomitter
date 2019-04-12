@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost/v1/profiles";
 
-interface Profile {
+export interface Profile {
   id: number;
   userId: number;
   displayName: string;
@@ -44,5 +44,5 @@ export async function create(displayName: string, description: string) {
   if (response.ok) {
     return await response.json();
   }
-  throw Error("Failed to fetch profiles.");
+  throw Error("Failed to create profiles.");
 }

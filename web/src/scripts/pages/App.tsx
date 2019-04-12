@@ -1,18 +1,29 @@
 import * as React from "react";
-import { BrowserRouter as Router, Route, Redirect, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import { LoginPage } from "./Login";
 import { Profile as ProfilePage } from "./Profile";
 import { Container } from "./Container";
 import { ContentPage } from "./Content";
-import { GlobalStateProvider } from "../Store";
+import { GlobalStateProvider, useGlobalState } from "../Store";
 import { GlobalStyle } from "../Style";
-
-interface State {
-  isLoggedIn: boolean;
-}
+import { identify } from "../api/Users";
+import { me } from "../api/Profiles";
+const { useEffect } = React;
 
 export const App = () => {
+  const [ _, setUser ] = useGlobalState("user");
+  const [ __, setProfile ] = useGlobalState("profile");
+
+  async function initUser() {
+    const user = await identify();
+    setUser(user);
+    const profile = await me();
+    setProfile(profile);
+  }
+
+  useEffect(() => {initUser()}, []);
+
   return (
     <>
       <GlobalStyle/>

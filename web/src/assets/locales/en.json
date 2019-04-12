@@ -1,0 +1,19 @@
+{
+  "header": {
+    "title": {
+      "label": "トミッター"
+    }
+  },
+  "profile": {
+    "displayName": "Name",
+    "description": "Self introduction",
+    "edit": "Edit"
+  },
+  "common": {
+    "change": "Change"
+  },
+  "tweet": {
+    "placeholder": "How about you?",
+    "tweet": "Tweet"
+  }
+}
