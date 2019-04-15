@@ -1,6 +1,14 @@
-const { ProfileNotFoundError, UserNotFoundError } = require("../domain/errors")
+import { UserNotFoundError, ProfileNotFoundError } from "../domain/errors";
 
-exports.handle = function handle(error) {
+interface ErrorResponse {
+  status: number;
+  error: {
+    errorCode: string;
+    message: string;
+  };
+}
+
+export function handle(error: Error): ErrorResponse {
   if (error instanceof UserNotFoundError) {
     return {
       status: 404,
