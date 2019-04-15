@@ -22,7 +22,7 @@ export const App = () => {
     setProfile(profile);
   }
 
-  useEffect(() => {initUser()}, []);
+  useEffect(() => { initUser() }, []);
 
   return (
     <>
