@@ -1,15 +1,17 @@
 package usecase
 
 import domain.*
+import inject
 import port.SessionPort
 import port.UsersPort
 import rest.FilteredUserJson
 import rest.FilteredUsersJson
+import kotlin.reflect.KClass
 
 class UsersUsecase {
 
-    lateinit var usersPort: UsersPort
-    lateinit var sessionPort: SessionPort
+    var usersPort: UsersPort = inject()
+    var sessionPort: SessionPort = inject()
 
     fun create(loginName: String, password: String): User =
         usersPort.create(LoginName(loginName), Password(password))

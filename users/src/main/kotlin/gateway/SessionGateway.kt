@@ -5,10 +5,11 @@ import domain.SessionCode
 import domain.SessionId
 import domain.UserId
 import driver.Database
+import inject
 import port.SessionPort
 
 class SessionGateway: SessionPort {
-    val driver = Singleton.get(Database::class) as Database
+    val driver: Database = inject()
 
     override fun create(sessionCode: SessionCode, userId: UserId): Session {
         return driver.sessions.create(sessionCode.value, userId.value)

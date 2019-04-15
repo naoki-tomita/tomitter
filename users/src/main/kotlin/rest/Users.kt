@@ -16,17 +16,7 @@ import io.ktor.routing.post
 import usecase.UsersUsecase
 import java.lang.Exception
 
-/**
- * リクエストを受け取ってusecaseを呼び出す。
- * usecaseは問題があればExceptionをthrowする。
- * restはExceptionをハンドルして、レスポンスを返す。
- */
-
-val usecase = UsersUsecase().let {
-    it.usersPort = UsersGateway()
-    it.sessionPort = SessionGateway()
-    it
-}
+val usecase = UsersUsecase()
 
 fun Route.create() {
     post("/users") {

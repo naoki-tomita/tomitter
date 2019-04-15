@@ -12,6 +12,8 @@ import port.SessionPort
 import port.UsersPort
 import rest.FilteredUserJson
 import rest.FilteredUsersJson
+import register
+import reset
 
 class UsecaseTest {
 
@@ -21,11 +23,12 @@ class UsecaseTest {
 
     @BeforeEach
     fun `usecaseとusersPort, sessionPortを初期化する`() {
-        usecase = UsersUsecase()
+        reset()
         usersPort = mockk<UsersPort>()
         sessionPort = mockk<SessionPort>()
-        usecase.usersPort = usersPort
-        usecase.sessionPort = sessionPort
+        register(usersPort)
+        register(sessionPort)
+        usecase = UsersUsecase()
     }
 
     @AfterEach
