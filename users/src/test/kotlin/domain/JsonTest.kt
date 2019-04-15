@@ -4,8 +4,9 @@ import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.shouldEqual
 import org.junit.jupiter.api.Test
+import rest.ErrorJson
 
-class ResponseTest {
+class JsonTest {
 
     @Test
     fun UserAlreadyExistExceptionからエラーレスポンスを生成する() {
@@ -13,8 +14,8 @@ class ResponseTest {
 
         every { loginName.value } returns "loginName"
 
-        ErrorResponse.from(UserAlreadyExistException(loginName)) shouldEqual
-                ErrorResponse("0", "loginName already exist.")
+        ErrorJson.from(UserAlreadyExistException(loginName)) shouldEqual
+                ErrorJson("0", "loginName already exist.")
     }
 
 }

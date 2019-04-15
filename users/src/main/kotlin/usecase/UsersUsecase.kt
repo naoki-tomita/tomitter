@@ -4,6 +4,8 @@ import domain.*
 import inject
 import port.SessionPort
 import port.UsersPort
+import rest.FilteredUserJson
+import rest.FilteredUsersJson
 import kotlin.reflect.KClass
 
 class UsersUsecase {
@@ -11,13 +13,14 @@ class UsersUsecase {
     var usersPort: UsersPort = inject()
     var sessionPort: SessionPort = inject()
 
-    fun create(request: CreateRequest): CreateResponse {
-        return usersPort.create(LoginName(request.loginName), Password(request.password))
-            .let { CreateResponse.from(it) }
-    }
+    fun create(loginName: String, password: String): User =
+        usersPort.create(LoginName(loginName), Password(password))
 
-    fun login(request: LoginRequest): Session {
-        return usersPort.findBy(LoginName(request.loginName), Password(request.password))
+    fun login(loginName: String, password: String): Session {
+        val loginName = LoginName(loginName)
+        val password = Password(password)
+        return ((usersPort.findBy(loginName) ?: throw UserNotFoundException(loginName))
+            .takeIf { it.password.matches(password) } ?: throw PasswordDidNotMatchException())
             .let { sessionPort.create(SessionCode.create(), it.id) }
     }
 
@@ -25,16 +28,16 @@ class UsersUsecase {
 //        return
 //    }
 
-    fun identify(sessionCode: SessionCode): IdentifyResponse {
+    fun identify(sessionCode: SessionCode): FilteredUserJson {
         return sessionPort.findBy(sessionCode)
-            .let { usersPort.findBy(it.userId) }
-            .let { IdentifyResponse(it.id.value, it.loginName.value) }
+            ?.let { usersPort.findBy(it.userId) }
+            ?.let { FilteredUserJson(it.id.value, it.loginName.value) } ?: throw SessionDidNotFoundException()
 
     }
 
-    fun list(): ListResponse {
+    fun list(): FilteredUsersJson {
         return usersPort.list()
-            .let { ListResponse.from(it) }
+            .let { FilteredUsersJson.from(it) }
     }
 
 }
