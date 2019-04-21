@@ -50,5 +50,8 @@ class Tweet < Grape::API
         end
       end
     end
+    namespace :dashboard do
+      
+    end
   end
 end
