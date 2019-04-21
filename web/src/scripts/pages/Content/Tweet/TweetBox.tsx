@@ -14,24 +14,19 @@ const FlexContainer = styled.div`
 
 interface TweetProps {
   onSend: () => void;
+  tweetText: string;
+  onTweetTextChange: (text: string) => void;
 }
 
-export const TweetBox: React.FunctionComponent<TweetProps> = ({ onSend }) => {
-  const [ tweetText, setTweetText ] = useState("")
-
-  function sendTweet() {
-    tweetText && (send(tweetText), onSend());
-    setTweetText("");
-  }
-
+export const TweetBox: React.FunctionComponent<TweetProps> = ({ onSend, onTweetTextChange, tweetText }) => {
   return (
     <FlexContainer>
       <LabeledInput
         label={t("tweet.placeholder")}
         value={tweetText}
-        onChange={t => setTweetText(t)}
+        onChange={onTweetTextChange}
       />
-      <Button onClick={sendTweet}>{t("tweet.tweet")}</Button>
+      <Button onClick={onSend}>{t("tweet.tweet")}</Button>
     </FlexContainer>
   );
 }

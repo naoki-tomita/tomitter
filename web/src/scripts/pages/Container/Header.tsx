@@ -75,7 +75,7 @@ const Background = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  box-shadow: 6px 0px 6px #aaa;
+  box-shadow: 0px 2px 6px #aaa;
 `;
 
 const FlexWrap = styled.div`

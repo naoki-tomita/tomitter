@@ -25,14 +25,14 @@ class Database {
 }
 
 class UsersTable {
-    fun create(loginName: String, password: String): User {
+    fun create(loginName: String, password: String): UserEntity {
         return transaction {
             try {
                 val id = Users.insertAndGetId {
                     it[Users.loginName] = loginName
                     it[Users.password] = password
                 }
-                User(id.value, loginName, password)
+                UserEntity(id.value, loginName, password)
             } catch (e: Exception) {
                 val original = e.cause
                 when (original) {
@@ -48,44 +48,31 @@ class UsersTable {
         }
     }
 
-    fun list(): List<User> {
+    fun list(): List<UserEntity> {
         return transaction { Companion.queryToUsers(Users.selectAll()) }
     }
 
-    fun findBy(loginName: String, password: String): User {
-        val users = transaction { Companion.queryToUsers(Users.select { Users.loginName eq loginName }) }
-        if (users.count() == 0) {
-                throw UserNotFoundException(LoginName(loginName))
-        }
-        if (users.first().password != password) {
-            throw PasswordDidNotMatchException()
-        }
-        return users.first()
-    }
+    fun findBy(loginName: String): UserEntity? =
+        transaction { Companion.queryToUsers(Users.select { Users.loginName eq loginName }) }.firstOrNull()
 
-    fun findBy(userId: Int): User {
-        val users = transaction { Companion.queryToUsers(Users.select { Users.id eq userId }) }
-        if (users.count() == 0) {
-            throw SessionDidNotFoundException()
-        }
-        return users.first()
-    }
+    fun findBy(userId: Int): UserEntity? =
+        transaction { Companion.queryToUsers(Users.select { Users.id eq userId }) }.firstOrNull()
 
     companion object {
-        private fun queryToUsers(query: Query): List<User> {
-            return query.map { User(it[Users.id].value, it[Users.loginName], it[Users.password]) }
+        private fun queryToUsers(query: Query): List<UserEntity> {
+            return query.map { UserEntity(it[Users.id].value, it[Users.loginName], it[Users.password]) }
         }
     }
 }
 
 class SessionTable {
-    fun create(sessionCode: String, userId: Int): Session {
+    fun create(sessionCode: String, userId: Int): SessionEntity {
         return transaction {
             val id = Sessions.insertAndGetId {
                 it[Sessions.sessionCode] = sessionCode
                 it[Sessions.userId] = userId
             }
-            Session(id.value, sessionCode, userId)
+            SessionEntity(id.value, sessionCode, userId)
         }
     }
 
@@ -95,26 +82,22 @@ class SessionTable {
         }
     }
 
-    fun findBy(sessionCode: String): Session {
-        try {
-            return transaction {
-                Sessions.select { Sessions.sessionCode eq sessionCode }
-                    .map { Session(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) }
-            }.first()
-        } catch (e: Throwable) {
-            throw SessionDidNotFoundException()
-        }
+    fun findBy(sessionCode: String): SessionEntity? {
+        return transaction {
+            Sessions.select { Sessions.sessionCode eq sessionCode }
+                .map { SessionEntity(it[Sessions.id].value, it[Sessions.sessionCode], it[Sessions.userId]) }
+        }.firstOrNull()
     }
 }
 
-data class User(val id: Int, val loginName: String, val password: String)
+data class UserEntity(val id: Int, val loginName: String, val password: String)
 object Users : IntIdTable() {
     val loginName: Column<String> = Users.varchar("login_name", 50).uniqueIndex()
     val password: Column<String> = Users.varchar("password", 50)
 }
 
 
-data class Session(val id: Int, val sessionCode: String, val userId: Int)
+data class SessionEntity(val id: Int, val sessionCode: String, val userId: Int)
 object Sessions : IntIdTable() {
     val sessionCode: Column<String> = Sessions.varchar("session_code", 50).uniqueIndex()
     val userId: Column<Int> = Sessions.integer("user_id")

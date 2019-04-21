@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { LabelAndValue } from "../components/LabelAndValue";
 import { me, create } from "../api/Profiles";
 import { t } from "../utils/I18n";
