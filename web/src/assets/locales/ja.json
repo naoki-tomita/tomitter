@@ -4,6 +4,10 @@
       "label": "Tomitter"
     }
   },
+  "users": {
+    "label": "🔎友達を探す",
+    "displayName": ""
+  },
   "profile": {
     "displayName": "名前",
     "description": "自己紹介",

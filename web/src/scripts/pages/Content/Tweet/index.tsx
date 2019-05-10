@@ -6,20 +6,50 @@ import { send, Tweet, userTweet } from "../../../api/Tweets";
 import { TweetDialog } from "./TweetDialog";
 const { useState, useEffect } = React;
 
-interface State {
-  tweetText: string;
+interface MyTweetState {
+  tweetText: string,
+  tweets: Tweet[],
+  selectedTweetId: number;
+}
+
+interface UserTweetState {
   tweets: Tweet[];
   selectedTweetId: number;
 }
 
-export const UserTweetPage: React.FunctionComponent<{ match: match; userId: string; }> = ({ userId }) => {
-  const [ state, setState ] = useState<State>({ tweetText: "", tweets: [], selectedTweetId: -1 });
+export const MyTweetPage: React.FunctionComponent = () => {
+  const [ state, setState ] = useState<MyTweetState>({ tweetText: "", tweets: [], selectedTweetId: -1 });
   const { tweetText, tweets, selectedTweetId } = state;
 
-  function sendTweet() {
-    tweetText && send(tweetText);
-    setState({ ...state, tweetText: "" });
+  let fetchCancel = false;
+  async function fetchTweets() {
+    const tweets = await userTweet("me");
+    fetchCancel || setState({ ...state, tweets });
   }
+
+  async function sendTweet() {
+    tweetText && await send(tweetText);
+    const tweets = await userTweet("me");
+    setState({ ...state, tweets, tweetText: "" });
+  }
+
+  useEffect(() => (fetchTweets(), function() { fetchCancel = true; }), []);
+  return (
+    <>
+      <TweetBox
+        onSend={sendTweet}
+        tweetText={tweetText}
+        onTweetTextChange={tweetText => setState({ ...state, tweetText })}
+      />
+      <TweetList onSelect={id => setState({ ...state, selectedTweetId: id })} tweets={tweets}/>
+      {selectedTweetId > -1 && <TweetDialog onClose={() => setState({ ...state, selectedTweetId: -1 })}>{tweets[selectedTweetId]}</TweetDialog>}
+    </>
+  );
+}
+
+export const UserTweetPage: React.FunctionComponent<{ match: match; userId: string; }> = ({ userId }) => {
+  const [ state, setState ] = useState<UserTweetState>({ tweets: [], selectedTweetId: -1 });
+  const { tweets, selectedTweetId } = state;
 
   let fetchCancel = false;
   async function fetchTweets() {
@@ -31,11 +61,6 @@ export const UserTweetPage: React.FunctionComponent<{ match: match; userId: stri
 
   return (
     <>
-      <TweetBox
-        onSend={sendTweet}
-        tweetText={tweetText}
-        onTweetTextChange={tweetText => setState({ ...state, tweetText })}
-      />
       <TweetList onSelect={id => setState({ ...state, selectedTweetId: id })} tweets={tweets}/>
       {selectedTweetId > -1 && <TweetDialog onClose={() => setState({ ...state, selectedTweetId: -1 })}>{tweets[selectedTweetId]}</TweetDialog>}
     </>

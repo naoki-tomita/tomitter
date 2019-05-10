@@ -8,7 +8,7 @@ export interface Profile {
 }
 
 interface Profiles {
-  values: Profile;
+  profiles: Profile[];
 }
 
 export async function profile(userId: number): Promise<Profile> {
