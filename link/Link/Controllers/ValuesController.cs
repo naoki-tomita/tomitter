@@ -32,7 +32,9 @@ namespace Link.Controllers
     [HttpGet]
     async public Task<ActionResult<IEnumerable<LinkIdJson>>> Get()
     {
-      var linksUserIds = await linkUsecase.ListLinks(new Cookie(HttpContext.Request.Headers["cookie"]));
+      var cookie = new Cookie(HttpContext.Request.Headers["cookie"]);
+      Console.WriteLine(cookie.value);
+      var linksUserIds = await linkUsecase.ListLinks(cookie);
       return linksUserIds.Select(link => new LinkIdJson { id = link.value }).ToList();
     }
 
@@ -47,11 +49,11 @@ namespace Link.Controllers
     private readonly DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(LinkIdJson));
     // POST v1/linkss
     [HttpPost]
-    public void Post()
+    async public Task Post()
     {
       var cookie = new Cookie(HttpContext.Request.Headers["cookie"]);
       var body = serializer.ReadObject(HttpContext.Request.Body) as LinkIdJson;
-      linkUsecase.Link(cookie, new UserId(body.id));
+      await linkUsecase.Link(cookie, new UserId(body.id));
     }
 
     // PUT api/values/5

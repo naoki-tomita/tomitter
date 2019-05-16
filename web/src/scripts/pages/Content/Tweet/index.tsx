@@ -42,7 +42,10 @@ export const MyTweetPage: React.FunctionComponent = () => {
         onTweetTextChange={tweetText => setState({ ...state, tweetText })}
       />
       <TweetList onSelect={id => setState({ ...state, selectedTweetId: id })} tweets={tweets}/>
-      {selectedTweetId > -1 && <TweetDialog onClose={() => setState({ ...state, selectedTweetId: -1 })}>{tweets[selectedTweetId]}</TweetDialog>}
+      {selectedTweetId > -1 &&
+        <TweetDialog onClose={() => setState({ ...state, selectedTweetId: -1 })}>
+          {tweets[selectedTweetId].tweet}
+        </TweetDialog>}
     </>
   );
 }

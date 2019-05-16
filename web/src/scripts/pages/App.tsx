@@ -9,17 +9,21 @@ import { GlobalStateProvider, useGlobalState } from "../Store";
 import { GlobalStyle } from "../Style";
 import { identify } from "../api/Users";
 import { me } from "../api/Profiles";
+import { getLinks } from "../api/Links";
 const { useEffect } = React;
 
 export const App = () => {
-  const [ _, setUser ] = useGlobalState("user");
-  const [ __, setProfile ] = useGlobalState("profile");
+  const [ , setUser ] = useGlobalState("user");
+  const [ , setProfile ] = useGlobalState("profile");
+  const [ , setLinks ] = useGlobalState("links");
 
   async function initUser() {
     const user = await identify();
     setUser(user);
     const profile = await me();
     setProfile(profile);
+    const { links } = await getLinks();
+    setLinks(links);
   }
 
   useEffect(() => { initUser() }, []);

@@ -22,7 +22,6 @@ namespace link.Drivers
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      Console.Write("foo");
       optionsBuilder.UseMySQL(
         new MySqlConnectionStringBuilder
         {
@@ -53,12 +52,12 @@ namespace link.Drivers
       }
     }
 
-    virtual public void Register(int user, int friend)
+    virtual public async void Register(int user, int friend)
     {
       using (var context = new LinkContext())
       {
-        context.Links.Add(new Link { user_id = user, friend_id = friend });
-        context.SaveChanges();
+        await context.Links.AddAsync(new Link { user_id = user, friend_id = friend });
+        await context.SaveChangesAsync();
       }
     }
 

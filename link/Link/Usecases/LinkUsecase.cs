@@ -11,7 +11,7 @@ namespace link.Usecases
     public LinkPort linkPort;
     public UserPort userPort;
 
-    public async void Link(Cookie cookie, UserId friendId)
+    public async Task Link(Cookie cookie, UserId friendId)
     {
       var user = await userPort.FindUser(cookie);
       linkPort.Register(user.id, friendId);
@@ -22,7 +22,8 @@ namespace link.Usecases
       throw new System.NotImplementedException("error");
     }
 
-    public async Task<List<UserId>> ListLinks(Cookie cookie) {
+    public async Task<List<UserId>> ListLinks(Cookie cookie)
+    {
       var user = await userPort.FindUser(cookie);
       return linkPort.FindAllByUserId(user.id);
     }

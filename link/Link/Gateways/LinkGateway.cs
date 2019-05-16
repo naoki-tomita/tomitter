@@ -2,6 +2,7 @@ using link.Domains;
 using link.Port;
 using link.Drivers;
 using System.Collections.Generic;
+using System;
 
 namespace link.Gateway
 {
@@ -14,7 +15,8 @@ namespace link.Gateway
       linkDriver.Register(user.value, linkedUser.value);
     }
 
-    virtual public List<UserId> FindAllByUserId(UserId user) {
+    virtual public List<UserId> FindAllByUserId(UserId user)
+    {
       return linkDriver.FindAllByUserId(user.value);
     }
   }

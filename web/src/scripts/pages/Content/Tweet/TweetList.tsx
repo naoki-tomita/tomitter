@@ -21,6 +21,8 @@ const TweetContent = styled.div`
   color: black;
   margin-bottom: 8px;
   transition: 0.3s;
+  display: flex;
+  justify-content: space-between;
 
   &:hover {
     box-shadow: 0px 2px 3px #bbb;
@@ -39,7 +41,10 @@ export const TweetList: React.FunctionComponent<Props> = ({ onSelect, tweets }) 
       <ListItem
         onClick={() => onSelect(i)} key={i}
       >
-        <TweetContent>{t}</TweetContent>
+        <TweetContent>
+          <div>{t.userId}</div>
+          <div>{t.tweet}</div>
+        </TweetContent>
       </ListItem>)}
     </ListContainer>
   );

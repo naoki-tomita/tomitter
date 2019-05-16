@@ -39,7 +39,7 @@ export class ProfileUsecase {
     }
     const profile = await this.profilePort.findByUserId(user.id);
     if (!profile) {
-      throw new ProfileNotFoundError(`Profile not found by userId: ${user.id}`);
+      throw new ProfileNotFoundError(`Profile not found by userId: ${user.id.value}`);
     }
     return profile;
   }

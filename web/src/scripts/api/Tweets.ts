@@ -1,6 +1,10 @@
 const BASE_PATH = "http://localhost/v1/tw"
 
-export type Tweet = string;
+export interface Tweet {
+  tweet: string;
+  at: number;
+  userId: number;
+}
 
 export async function me() {
   const response = await fetch(`${BASE_PATH}/users/me/tweets`);

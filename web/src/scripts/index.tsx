@@ -6,8 +6,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 async function main() {
-  library.add(faTimes);
-  await init(navigator.language as "en" | "ja");
+  library.add(faTimes); // for font-awesome.
+  await init(navigator.language as "en" | "ja"); // for initialize i18n.
   ReactDOM.render(<App />, document.getElementById("app"))
 }
 
