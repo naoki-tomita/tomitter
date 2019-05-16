@@ -1,8 +1,8 @@
 import * as React from "react";
 import { RouteComponentProps, Route, Redirect, match } from "react-router-dom";
-import { UserTweetPage } from "./Tweet";
-import console = require("console");
+import { UserTweetPage, MyTweetPage } from "./Tweet";
 import { useGlobalState } from "../../Store";
+import { UserPage } from "./User";
 
 export const ContentPage: React.ComponentType<RouteComponentProps> = ({ match }) => {
   const [ user ] = useGlobalState("user");
@@ -13,35 +13,35 @@ export const ContentPage: React.ComponentType<RouteComponentProps> = ({ match })
         component={() => <Redirect to={`${match.path}/tweets`}/>}
       />
       <Route
-        path={`${match.path}/tweets`} exact
-        component={() =>
-          <UserTweetPage match={match} userId={user.id.toString()} />}
+        path={`${match.path}/users/`}
+        component={UsersContentPage}
       />
       <Route
-        path={`${match.path}/users/:id/tweets`}
-        component={({ match }: { match: match<{id: string}>}) =>
-          <UserTweetPage match={match} userId={match.params.id}/>}
+        path={`${match.path}/tweets`} exact
+        component={() =>
+          <MyTweetPage />}
       />
     </>
   );
 }
 
-type Foo = string | number;
-interface Bar {
-  x: string;
-  y: number;
-}
-
-const UsersPage: React.ComponentType<RouteComponentProps> = ({ match }) => {
+const UsersContentPage: React.ComponentType<RouteComponentProps> = ({ match }) => {
   return (
     <>
-    <Route
-      path={`${match.path}/:id`} exact
-      component={() => <Redirect to={`${match.path}/users`}/>}
-    />
-    <Route
-      path={`${match.path}/:id`} exact
-    />
+      <Route
+        path={`${match.url}/`} exact
+        component={() => <UserPage />}
+      />
+      <Route
+        path={`${match.url}/:id`} exact
+        component={({ match }: { match: match }) =>
+          <Redirect to={`${match.url}/tweets`}/>}
+      />
+      <Route
+        path={`${match.url}/:id/tweets`} exact
+        component={({ match }: { match: match<{id: string}>}) =>
+          <UserTweetPage match={match} userId={match.params.id}/>}
+      />
     </>
   );
 }

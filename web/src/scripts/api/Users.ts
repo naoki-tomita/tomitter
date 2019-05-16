@@ -29,7 +29,7 @@ export async function create(loginName: string, password: string): Promise<User>
   throw Error("create failed.");
 }
 
-export async function list(): Promise<User[]> {
+export async function list(): Promise<{ users: User[] }> {
   const response = await fetch(`${BASE_PATH}`);
   if (response.ok) {
     return await response.json();

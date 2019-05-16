@@ -149,12 +149,28 @@ const ProfileMenu = () => {
   );
 }
 
+const UserSearch = () => {
+  return (
+    <Flex3>
+      <Margin>
+        <Link
+          to="/app/content/users"
+          style={{ textDecoration: "none" }}
+        >
+          {t("users.label")}
+        </Link>
+      </Margin>
+    </Flex3>
+  );
+}
+
 export const Header: React.FunctionComponent<Props> = () => {
   return (
     <Background>
       <FlexWrap>
         <Title />
-        <Search />
+        <UserSearch />
+        {/* <Search /> */}
         <ProfileMenu />
       </FlexWrap>
     </Background>
