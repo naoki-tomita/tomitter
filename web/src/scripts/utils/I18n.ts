@@ -13,7 +13,7 @@ export class I18n {
     return t;
   }
 
-  t(key: string): string {
+  t(key: string, object?: { [key: string]: string }): string {
     const keys = key.split(".");
     let tmp = this.map || {};
     for (const key of keys) {
@@ -21,7 +21,16 @@ export class I18n {
         (tmp as KV | string) = tmp[key] || {};
       }
     }
-    return typeof tmp === "string" ? tmp : key;
+    if (typeof tmp === "string") {
+      if (object) {
+        console.log(object);
+        return Object.keys(object)
+          .reduce((result, key) =>
+            result.replace(new RegExp(`__${key}__`, "g"), object[key]), tmp)
+      }
+      return tmp;
+    }
+    return key;
   }
 }
 
@@ -31,6 +40,6 @@ export async function init(lang: "en" | "ja") {
   return await i18n.init(lang);
 }
 
-export function t(key: string) {
+export function t(key: string, object?: { [key: string]: string }) {
   return i18n.t(key);
 }

@@ -50,5 +50,11 @@ describe("I18n", () => {
         expect(i18n.t(key)).toBe(expected);
       });
     });
+
+    it("should replace __foo__ with text.", () => {
+      const i18n = new I18n();
+      i18n.map = { foo: "__foo__ bar" };
+      expect(i18n.t("foo", { foo: "bar" })).toBe("bar bar");
+    });
   });
 });
