@@ -48,3 +48,11 @@ export async function identify(): Promise<User> {
   }
   throw Error("list failed.");
 }
+
+export async function user(userId: number): Promise<User> {
+  const response = await fetch(`${BASE_PATH}/${userId}`);
+  if (response.ok) {
+    return await response.json();
+  }
+  throw Error("list failed.");
+}

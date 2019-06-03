@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Tweet } from "../../../api/Tweets";
+import { TweetComposite } from "../../../api/Composite";
 
 
 const ListContainer = styled.ul`
@@ -22,19 +23,36 @@ const TweetContent = styled.div`
   margin-bottom: 8px;
   transition: 0.3s;
   display: flex;
-  justify-content: space-between;
 
   &:hover {
     box-shadow: 0px 2px 3px #bbb;
   }
 `;
 
+const TweetIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  margin: 4px;
+  background-color: #ccc;
+  border: solid 1px #bbb;
+  border-radius: 4px;
+`;
+
+const TweetUser = styled.div`
+  font-size: 20px;
+`;
+
+const Tweet = styled.div`
+
+`;
+
 interface Props {
-  tweets: Tweet[];
+  tweets: TweetComposite[];
   onSelect: (id: number) => void;
 }
 
 export const TweetList: React.FunctionComponent<Props> = ({ onSelect, tweets }) => {
+  console.log(tweets.length);
   return (
     <ListContainer>
     {tweets.map((t, i) =>
@@ -42,8 +60,11 @@ export const TweetList: React.FunctionComponent<Props> = ({ onSelect, tweets }) 
         onClick={() => onSelect(i)} key={i}
       >
         <TweetContent>
-          <div>{t.userId}</div>
+          <TweetIcon />
+          <div>
+          <TweetUser>{t.displayName}</TweetUser>
           <div>{t.tweet}</div>
+          </div>
         </TweetContent>
       </ListItem>)}
     </ListContainer>

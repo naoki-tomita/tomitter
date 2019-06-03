@@ -2,18 +2,19 @@ import * as React from "react";
 import { match } from "react-router-dom";
 import { TweetBox } from "./TweetBox";
 import { TweetList } from "./TweetList";
-import { send, Tweet, userTweet } from "../../../api/Tweets";
+import { send } from "../../../api/Tweets";
+import { myTweetList, tweetList, TweetComposite } from "../../../api/Composite";
 import { TweetDialog } from "./TweetDialog";
 const { useState, useEffect } = React;
 
 interface MyTweetState {
   tweetText: string,
-  tweets: Tweet[],
+  tweets: TweetComposite[],
   selectedTweetId: number;
 }
 
 interface UserTweetState {
-  tweets: Tweet[];
+  tweets: TweetComposite[];
   selectedTweetId: number;
 }
 
@@ -23,13 +24,15 @@ export const MyTweetPage: React.FunctionComponent = () => {
 
   let fetchCancel = false;
   async function fetchTweets() {
-    const tweets = await userTweet("me");
+    const tweets = await myTweetList();
+    console.log(tweets);
     fetchCancel || setState({ ...state, tweets });
   }
 
   async function sendTweet() {
     tweetText && await send(tweetText);
-    const tweets = await userTweet("me");
+    const tweets = await myTweetList();
+    console.log(tweets);
     setState({ ...state, tweets, tweetText: "" });
   }
 
@@ -56,7 +59,8 @@ export const UserTweetPage: React.FunctionComponent<{ match: match; userId: stri
 
   let fetchCancel = false;
   async function fetchTweets() {
-    const tweets = await userTweet(userId);
+    const tweets = await tweetList(parseInt(userId));
+    console.log(tweets);
     fetchCancel || setState({ ...state, tweets });
   }
 

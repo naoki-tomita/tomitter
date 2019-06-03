@@ -28,16 +28,17 @@ class UsersUsecase {
 //        return
 //    }
 
-    fun identify(sessionCode: SessionCode): FilteredUserJson {
-        return sessionPort.findBy(sessionCode)
+    fun identify(sessionCode: SessionCode): FilteredUserJson =
+        sessionPort.findBy(sessionCode)
             ?.let { usersPort.findBy(it.userId) }
             ?.let { FilteredUserJson(it.id.value, it.loginName.value) } ?: throw SessionDidNotFoundException()
 
-    }
+    fun list(): FilteredUsersJson = usersPort.list()
+        .let { FilteredUsersJson.from(it) }
 
-    fun list(): FilteredUsersJson {
-        return usersPort.list()
-            .let { FilteredUsersJson.from(it) }
-    }
+    fun user(userId: UserId): FilteredUserJson =
+        usersPort.findBy(userId)
+            ?.let { FilteredUserJson.from(it) }
+            ?: throw UserNotFoundException(LoginName(""))
 
 }
