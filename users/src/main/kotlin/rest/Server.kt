@@ -34,6 +34,7 @@ fun createServer() =
                 login()
                 identify()
                 list()
+                user()
             }
         }
     }

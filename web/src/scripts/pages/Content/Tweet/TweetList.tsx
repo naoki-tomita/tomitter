@@ -36,14 +36,15 @@ const TweetIcon = styled.div`
   background-color: #ccc;
   border: solid 1px #bbb;
   border-radius: 4px;
+  min-width: 40px;
 `;
 
 const TweetUser = styled.div`
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const Tweet = styled.div`
-
+  font-size: 18px;
 `;
 
 interface Props {
@@ -52,7 +53,6 @@ interface Props {
 }
 
 export const TweetList: React.FunctionComponent<Props> = ({ onSelect, tweets }) => {
-  console.log(tweets.length);
   return (
     <ListContainer>
     {tweets.map((t, i) =>
@@ -62,8 +62,8 @@ export const TweetList: React.FunctionComponent<Props> = ({ onSelect, tweets }) 
         <TweetContent>
           <TweetIcon />
           <div>
-          <TweetUser>{t.displayName}</TweetUser>
-          <div>{t.tweet}</div>
+            <TweetUser>{t.displayName}</TweetUser>
+            <Tweet>{t.tweet}</Tweet>
           </div>
         </TweetContent>
       </ListItem>)}

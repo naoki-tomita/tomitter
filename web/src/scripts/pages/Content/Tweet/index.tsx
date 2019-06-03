@@ -25,14 +25,12 @@ export const MyTweetPage: React.FunctionComponent = () => {
   let fetchCancel = false;
   async function fetchTweets() {
     const tweets = await myTweetList();
-    console.log(tweets);
     fetchCancel || setState({ ...state, tweets });
   }
 
   async function sendTweet() {
     tweetText && await send(tweetText);
     const tweets = await myTweetList();
-    console.log(tweets);
     setState({ ...state, tweets, tweetText: "" });
   }
 
@@ -60,7 +58,6 @@ export const UserTweetPage: React.FunctionComponent<{ match: match; userId: stri
   let fetchCancel = false;
   async function fetchTweets() {
     const tweets = await tweetList(parseInt(userId));
-    console.log(tweets);
     fetchCancel || setState({ ...state, tweets });
   }
 
@@ -69,7 +66,7 @@ export const UserTweetPage: React.FunctionComponent<{ match: match; userId: stri
   return (
     <>
       <TweetList onSelect={id => setState({ ...state, selectedTweetId: id })} tweets={tweets}/>
-      {selectedTweetId > -1 && <TweetDialog onClose={() => setState({ ...state, selectedTweetId: -1 })}>{tweets[selectedTweetId]}</TweetDialog>}
+      {selectedTweetId > -1 && <TweetDialog onClose={() => setState({ ...state, selectedTweetId: -1 })}>{tweets[selectedTweetId].tweet}</TweetDialog>}
     </>
   );
 }

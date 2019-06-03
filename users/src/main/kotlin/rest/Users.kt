@@ -84,7 +84,9 @@ fun Route.user() {
     get("/users/{id}") {
         try {
             val id = call.parameters["id"]
-            id?.toInt()?.let { usecase.user(UserId(it)) } ?: throw RuntimeException()
+            id?.toInt()
+                ?.let { usecase.user(UserId(it)) }
+                ?.let { call.respond(it) } ?: throw RuntimeException()
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e);

@@ -1,4 +1,4 @@
-const BASE_PATH = "http://localhost/v1/tw"
+const BASE_PATH = "/v1/tw"
 
 export interface Tweet {
   tweet: string;

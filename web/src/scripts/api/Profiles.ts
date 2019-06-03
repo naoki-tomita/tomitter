@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost/v1/profiles";
+const BASE_URL = "/v1/profiles";
 
 export interface Profile {
   id: number;

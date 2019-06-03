@@ -1,4 +1,4 @@
-const BASE_PATH = "http://localhost/v1/links";
+const BASE_PATH = "/v1/links";
 
 export interface Link {
   id: number;

@@ -23,7 +23,6 @@ export class I18n {
     }
     if (typeof tmp === "string") {
       if (object) {
-        console.log(object);
         return Object.keys(object)
           .reduce((result, key) =>
             result.replace(new RegExp(`__${key}__`, "g"), object[key]), tmp)

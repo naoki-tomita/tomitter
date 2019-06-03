@@ -7,7 +7,7 @@ export interface Users {
   users: User[];
 }
 
-const BASE_PATH = "http://localhost/v1/users"
+const BASE_PATH = "/v1/users"
 
 export async function login(loginName: string, password: string): Promise<User> {
   const response = await fetch(`${BASE_PATH}/login`, {

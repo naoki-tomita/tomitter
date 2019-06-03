@@ -3,13 +3,14 @@ using Xunit;
 using Moq;
 using link.Domains;
 using link.Port;
+using System.Threading.Tasks;
 
 namespace link.Usecases.Test
 {
   public class LinkUsecaseTest
   {
     [Fact]
-    public void Linkを作成する()
+    public async Task Linkを作成する()
     {
       var target = new LinkUsecase();
       var cookie = new Cookie("foo");
@@ -23,7 +24,7 @@ namespace link.Usecases.Test
       userGateway.Setup(m => m.FindUser(cookie)).ReturnsAsync(user);
       linkGateway.Setup(m => m.Register(user.id, friendId));
 
-      target.Link(cookie, friendId);
+      await target.Link(cookie, friendId);
 
       userGateway.Verify(m => m.FindUser(cookie));
       linkGateway.Verify(m => m.Register(user.id, friendId));

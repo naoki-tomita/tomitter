@@ -1,4 +1,4 @@
-import { list as userList, user } from "./Users";
+import { list as userList, user, identify } from "./Users";
 import { list as profileList, Profile, profile as fetchProfile } from "./Profiles";
 import { userTweet } from "./Tweets";
 import { getLinks } from "./Links";
@@ -15,8 +15,8 @@ export async function list(): Promise<UserComposite[]> {
     const profile = profiles.find(profile => profile.userId === user.id);
     return {
       id: user.id,
-      displayName: profile ? profile.displayName : user.loginName,
-      description: profile ? profile.description : "",
+      displayName: profile && profile.displayName || user.loginName,
+      description: profile && profile.description || "",
     };
   });
 }
@@ -30,8 +30,8 @@ export async function usersList(userIds: number[]): Promise<UserComposite[]> {
     const profile = profiles.find(profile => profile.userId === user.id);
     return {
       id: user.id,
-      displayName: profile ? profile.displayName : user.loginName,
-      description: profile ? profile.description : "",
+      displayName: profile && profile.displayName || user.loginName,
+      description: profile && profile.description || "",
     };
   });
 }
@@ -52,12 +52,18 @@ export interface TweetComposite {
   tweet: string;
 }
 
+async function myProfile() {
+  const myUser = await identify();
+  return await usersList([myUser.id]);
+}
+
 export async function myTweetList(): Promise<TweetComposite[]> {
-  const [tweets, profiles] = await Promise.all([
+  const [tweets, profiles, profile] = await Promise.all([
     userTweet("me"),
     linkedProfiles(),
+    myProfile(),
   ]);
-  const map = profiles.reduce<{ [key: number]: UserComposite }>(
+  const map = [...profile, ...profiles].reduce<{ [key: number]: UserComposite }>(
     (prev, current) => ({ ...prev, [current.id]: current }), {});
 
   return tweets.map(({ userId, tweet }) => ({ id: userId, displayName: map[userId].displayName, tweet, }));
