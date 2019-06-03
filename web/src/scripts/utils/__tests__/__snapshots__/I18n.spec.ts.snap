@@ -2,15 +2,49 @@
 
 exports[`I18n #init should fetch resource 1`] = `
 Object {
+  "common": Object {
+    "change": "Change",
+  },
   "default": Object {
+    "common": Object {
+      "change": "Change",
+    },
+    "header": Object {
+      "title": Object {
+        "label": "トミッター",
+      },
+    },
     "profile": Object {
       "description": "Self introduction",
       "displayName": "Name",
+      "edit": "Edit",
+    },
+    "tweet": Object {
+      "placeholder": "How about you?",
+      "tweet": "Tweet",
+    },
+    "users": Object {
+      "displayName": "__displayName__",
+      "label": "🔎Find friend",
+    },
+  },
+  "header": Object {
+    "title": Object {
+      "label": "トミッター",
     },
   },
   "profile": Object {
     "description": "Self introduction",
     "displayName": "Name",
+    "edit": "Edit",
+  },
+  "tweet": Object {
+    "placeholder": "How about you?",
+    "tweet": "Tweet",
+  },
+  "users": Object {
+    "displayName": "__displayName__",
+    "label": "🔎Find friend",
   },
 }
 `;

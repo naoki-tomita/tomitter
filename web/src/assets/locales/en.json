@@ -4,6 +4,10 @@
       "label": "トミッター"
     }
   },
+  "users": {
+    "label": "🔎Find friend",
+    "displayName": "__displayName__"
+  },
   "profile": {
     "displayName": "Name",
     "description": "Self introduction",
