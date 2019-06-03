@@ -6,7 +6,8 @@
   },
   "users": {
     "label": "🔎友達を探す",
-    "displayName": "__displayName__さん"
+    "displayName": "__displayName__さん",
+    "link": "🤝友達になる"
   },
   "profile": {
     "displayName": "名前",

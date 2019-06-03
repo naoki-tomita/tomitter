@@ -7,6 +7,7 @@ import { ProfileUsecase } from "../usecase/profile";
 import { Cookie } from "../domain/cookie";
 import { Description, Profile, Profiles } from "../domain/profiles";
 import { Name } from "../domain/Name";
+import { Id } from "../domain/Id";
 
 export class ProfileResource {
 
@@ -32,7 +33,7 @@ export class ProfileResource {
     app.get("/v1/profiles/:userId", async (req, res) => {
       try {
         const { userId } = req.params;
-        const profile = await this.profileUsecase.findByUserId(userId);
+        const profile = await this.profileUsecase.findByUserId(new Id(userId));
         res.json(toProfileJson(profile));
       } catch (e) {
         console.error(e);

@@ -3,6 +3,10 @@ export interface User {
   loginName: string;
 }
 
+export interface Users {
+  users: User[];
+}
+
 const BASE_PATH = "http://localhost/v1/users"
 
 export async function login(loginName: string, password: string): Promise<User> {
@@ -29,7 +33,7 @@ export async function create(loginName: string, password: string): Promise<User>
   throw Error("create failed.");
 }
 
-export async function list(): Promise<{ users: User[] }> {
+export async function list(): Promise<Users> {
   const response = await fetch(`${BASE_PATH}`);
   if (response.ok) {
     return await response.json();
@@ -39,6 +43,14 @@ export async function list(): Promise<{ users: User[] }> {
 
 export async function identify(): Promise<User> {
   const response = await fetch(`${BASE_PATH}/identify`);
+  if (response.ok) {
+    return await response.json();
+  }
+  throw Error("list failed.");
+}
+
+export async function user(userId: number): Promise<User> {
+  const response = await fetch(`${BASE_PATH}/${userId}`);
   if (response.ok) {
     return await response.json();
   }

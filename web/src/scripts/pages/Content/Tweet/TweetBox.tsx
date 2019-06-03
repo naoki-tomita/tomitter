@@ -1,11 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
-import { RouteComponentProps, Link, Route, match } from "react-router-dom";
 import { LabeledInput } from "../../../components/LabeledInput";
 import { t } from "../../../utils/I18n";
 import { Button } from "../../../elements/Button";
-import { send } from "../../../api/Tweets";
-const { useState } = React;
 
 const FlexContainer = styled.div`
   display: flex;

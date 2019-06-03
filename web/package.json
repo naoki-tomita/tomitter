@@ -10,6 +10,7 @@
     "@types/styled-components": "^4.1.12",
     "jest": "^24.5.0",
     "jest-fetch-mock": "^2.1.1",
+    "local-web-server": "^2.6.1",
     "parcel-bundler": "^1.12.0",
     "react": "~16.8.0",
     "react-dom": "^16.8.4",
@@ -28,6 +29,9 @@
   },
   "scripts": {
     "start": "parcel ./src/index.html -p 8080 --public-url /app",
+    "clean": "rm -rf dist",
+    "build": "parcel build ./src/index.html --public-url /app",
+    "serve": "ws -p 8080 --spa ./dist/index.html --rewrite '/app/:static -> /dist/:static'",
     "test": "jest"
   },
   "jest": {

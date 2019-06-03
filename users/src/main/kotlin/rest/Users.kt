@@ -15,6 +15,7 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import usecase.UsersUsecase
 import java.lang.Exception
+import java.lang.RuntimeException
 
 val usecase = UsersUsecase()
 
@@ -74,6 +75,19 @@ fun Route.list() {
         } catch (e: Throwable) {
             e.printStackTrace()
             val pair = handle(e)
+            call.respond(pair.first, pair.second)
+        }
+    }
+}
+
+fun Route.user() {
+    get("/users/{id}") {
+        try {
+            val id = call.parameters["id"]
+            id?.toInt()?.let { usecase.user(UserId(it)) } ?: throw RuntimeException()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            val pair = handle(e);
             call.respond(pair.first, pair.second)
         }
     }
